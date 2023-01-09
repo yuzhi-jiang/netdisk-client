@@ -16,7 +16,6 @@ export default function configCompressPlugin(
     plugins.push(
       compressPlugin({
         ext: '.gz',
-        algorithm: 'gzip',
         deleteOriginFile,
       })
     );
