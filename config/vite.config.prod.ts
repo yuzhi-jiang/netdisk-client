@@ -20,7 +20,6 @@ export default mergeConfig(
     build: {
       rollupOptions: {
         output: {
-          chunkFileNames: '',
           manualChunks: {
             arco: ['@arco-design/web-vue'],
             chart: ['echarts', 'vue-echarts'],
