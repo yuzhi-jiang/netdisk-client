@@ -20,6 +20,7 @@ export default mergeConfig(
     build: {
       rollupOptions: {
         output: {
+          chunkFileNames: '',
           manualChunks: {
             arco: ['@arco-design/web-vue'],
             chart: ['echarts', 'vue-echarts'],
@@ -28,11 +29,6 @@ export default mergeConfig(
         },
       },
       chunkSizeWarningLimit: 2000,
-      terserOptions: {
-        // 打包后移除console和debugger
-        drop_console: true,
-        drop_debugger: true,
-      },
     },
   } as UserConfigExport,
   baseConfig
