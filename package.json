@@ -29,6 +29,8 @@
     ]
   },
   "dependencies": {
+    "@arco-design/web-vue": "^2.37.4",
+    "@arco-iconbox/vue-secker-icon": "^0.0.1",
     "@vueuse/core": "^9.3.0",
     "axios": "^0.24.0",
     "dayjs": "^1.11.5",
@@ -45,7 +47,6 @@
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
-    "@arco-design/web-vue": "^2.40.0",
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
     "@types/lodash": "^4.14.186",
@@ -97,6 +98,6 @@
     "gifsicle": "5.2.0"
   },
   "peerDependencies": {
-    "@arco-design/web-vue": "^2.40.0"
+    "@arco-design/web-vue": "^2.37.4"
   }
 }
