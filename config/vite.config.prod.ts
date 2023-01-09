@@ -1,4 +1,5 @@
 import { mergeConfig } from 'vite';
+import type { UserConfigExport } from 'vite';
 import baseConfig from './vite.config.base';
 import configCompressPlugin from './plugin/compress';
 import configVisualizerPlugin from './plugin/visualizer';
@@ -27,7 +28,12 @@ export default mergeConfig(
         },
       },
       chunkSizeWarningLimit: 2000,
+      terserOptions: {
+        // 打包后移除console和debugger
+        drop_console: true,
+        drop_debugger: true,
+      },
     },
-  },
+  } as UserConfigExport,
   baseConfig
 );
