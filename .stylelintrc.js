@@ -3,6 +3,8 @@ module.exports = {
     'stylelint-config-standard',
     'stylelint-config-rational-order',
     'stylelint-config-prettier',
+    'stylelint-config-standard-scss',
+    'stylelint-config-recommended-vue',
   ],
   defaultSeverity: 'warning',
   plugins: ['stylelint-order'],
@@ -22,7 +24,7 @@ module.exports = {
     'selector-pseudo-class-no-unknown': [
       true,
       {
-        ignorePseudoClasses: ['deep'],
+        ignorePseudoClasses: ['deep', 'v-deep'],
       },
     ],
   },
