@@ -1,5 +1,5 @@
 <template>
-  <a-layout-footer class="footer">© netdisk</a-layout-footer>
+  <a-layout-footer class="footer">© Netdisk</a-layout-footer>
 </template>
 
 <style lang="less" scoped>
