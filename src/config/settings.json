@@ -6,6 +6,7 @@
   "hideMenu": false,
   "menuCollapse": false,
   "footer": true,
+  "copyright": "Netdisk",
   "themeColor": "#165DFF",
   "menuWidth": 220,
   "globalSettings": false,
