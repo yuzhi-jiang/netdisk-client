@@ -20,7 +20,10 @@ app.use(ArcoVueIcon);
 app.use(router);
 app.use(store);
 app.use(i18n);
-app.use(globalComponents);
+app.use(globalComponents, {
+  // use iconfont with symbol
+  iconfont: '//at.alicdn.com/t/c/font_3852442_cchwuadrupl.js',
+});
 app.use(directive);
 
 app.mount('#app');
