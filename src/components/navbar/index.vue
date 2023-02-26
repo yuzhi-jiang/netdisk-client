@@ -1,16 +1,13 @@
 <template>
   <div class="navbar">
     <div class="left-side">
-      <a-space>
-        <img
-          alt="logo"
-          src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
-        />
+      <a-space style="cursor: pointer" @click="toHome">
+        <img alt="logo" src="/images/favicon32.png" />
         <a-typography-title
           :style="{ margin: 0, fontSize: '18px' }"
           :heading="5"
         >
-          Arco Pro
+          Netdisk
         </a-typography-title>
         <icon-menu-fold
           v-if="appStore.device === 'mobile'"
@@ -188,6 +185,7 @@
 
 <script lang="ts" setup>
   import { computed, ref, inject } from 'vue';
+  import { useRouter } from 'vue-router';
   import { Message } from '@arco-design/web-vue';
   import { useDark, useToggle, useFullscreen } from '@vueuse/core';
   import { useAppStore, useUserStore } from '@/store';
@@ -196,6 +194,7 @@
   import useUser from '@/hooks/user';
   import MessageBox from '../message-box/index.vue';
 
+  const router = useRouter();
   const appStore = useAppStore();
   const userStore = useUserStore();
   const { logout } = useUser();
@@ -252,6 +251,10 @@
     Message.success(res as string);
   };
   const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void;
+  const toHome = () =>
+    router.push({
+      path: '/',
+    });
 </script>
 
 <style scoped lang="less">
@@ -273,9 +276,11 @@
     display: flex;
     padding-right: 20px;
     list-style: none;
+
     :deep(.locale-select) {
       border-radius: 20px;
     }
+
     li {
       display: flex;
       align-items: center;
@@ -286,16 +291,19 @@
       color: var(--color-text-1);
       text-decoration: none;
     }
+
     .nav-btn {
-      border-color: rgb(var(--gray-2));
       color: rgb(var(--gray-8));
       font-size: 16px;
+      border-color: rgb(var(--gray-2));
     }
+
     .trigger-btn,
     .ref-btn {
       position: absolute;
       bottom: 14px;
     }
+
     .trigger-btn {
       margin-left: 14px;
     }
