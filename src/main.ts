@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import ArcoVue from '@arco-design/web-vue';
+import ArcoVue, { Modal, Message, Notification } from '@arco-design/web-vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';
 import globalComponents from '@/components';
 import router from './router';
@@ -16,6 +16,12 @@ const app = createApp(App);
 
 app.use(ArcoVue, {});
 app.use(ArcoVueIcon);
+
+/* eslint-disable */
+Modal._context = app._context;
+Message._context = app._context;
+Notification._context = app._context;
+/* eslint-enable */
 
 app.use(router);
 app.use(store);
