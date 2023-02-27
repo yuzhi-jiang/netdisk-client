@@ -1,3 +1,6 @@
+/**
+ * The guard of user login
+ */
 import type { Router, LocationQueryRaw } from 'vue-router';
 import NProgress from 'nprogress'; // progress bar
 
@@ -9,10 +12,13 @@ export default function setupUserLoginInfoGuard(router: Router) {
     NProgress.start();
     const userStore = useUserStore();
     if (isLogin()) {
+      // isLogin, use token
+
       if (userStore.role) {
         next();
       } else {
         try {
+          // get user info
           await userStore.info();
           next();
         } catch (error) {
@@ -27,6 +33,8 @@ export default function setupUserLoginInfoGuard(router: Router) {
         }
       }
     } else {
+      // require login
+
       if (to.name === 'login') {
         next();
         return;
