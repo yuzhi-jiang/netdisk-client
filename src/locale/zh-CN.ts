@@ -39,6 +39,12 @@ export default {
   'menu.faq': '常见问题',
   'navbar.docs': '文档中心',
   'navbar.action.locale': '切换为中文',
+  // customer
+  'menu.filelist': '我的文件',
+  'menu.filelist.all': '所有文件',
+  'menu.filelist.collection': '我的收藏',
+  'menu.filelist.latest': '最常使用',
+
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,

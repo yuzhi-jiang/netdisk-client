@@ -29,6 +29,7 @@ export default {
   'menu.server.workplace': 'Workplace-Server',
   'menu.server.monitor': 'Monitor-Server',
   'menu.list': 'List',
+  'menu.filelist': 'FileList',
   'menu.result': 'Result',
   'menu.exception': 'Exception',
   'menu.form': 'Form',
