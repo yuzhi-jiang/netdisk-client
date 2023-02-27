@@ -23,6 +23,16 @@ const FileList: AppRouteRecordRaw = {
       },
     },
     {
+      name: 'file.latest',
+      path: 'latest',
+      component: null,
+      meta: {
+        locale: 'menu.filelist.latest',
+        requiresAuth: true,
+        icon: 'icon-clock-circle',
+      },
+    },
+    {
       name: 'file.collection',
       path: 'collection',
       component: null,
@@ -33,13 +43,23 @@ const FileList: AppRouteRecordRaw = {
       },
     },
     {
-      name: 'file.latest',
-      path: 'latest',
+      name: 'file.share',
+      path: 'share',
       component: null,
       meta: {
-        locale: 'menu.filelist.latest',
+        locale: 'menu.filelist.share',
         requiresAuth: true,
-        icon: 'icon-clock-circle',
+        icon: 'icon-share-alt',
+      },
+    },
+    {
+      name: 'file.recycle',
+      path: 'recycle',
+      component: null,
+      meta: {
+        locale: 'menu.filelist.recycle',
+        requiresAuth: true,
+        icon: 'icon-relation',
       },
     },
   ],

@@ -42,8 +42,10 @@ export default {
   // customer
   'menu.filelist': '我的文件',
   'menu.filelist.all': '所有文件',
-  'menu.filelist.collection': '我的收藏',
   'menu.filelist.latest': '最常使用',
+  'menu.filelist.collection': '我的收藏',
+  'menu.filelist.share': '我的分享',
+  'menu.filelist.recycle': '回收站',
 
   ...localeSettings,
   ...localeMessageBox,
