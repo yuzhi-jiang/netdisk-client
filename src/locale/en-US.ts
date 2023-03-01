@@ -21,6 +21,9 @@ import locale500 from '@/views/exception/500/locale/en-US';
 import localeUserInfo from '@/views/user/info/locale/en-US';
 import localeUserSetting from '@/views/user/setting/locale/en-US';
 
+// customer
+import localeFileList from '@/views/filelist/locale/en-US';
+
 import localeSettings from './en-US/settings';
 
 export default {
@@ -40,6 +43,7 @@ export default {
   'menu.faq': 'FAQ',
   'navbar.docs': 'Docs',
   'navbar.action.locale': 'Switch to English',
+
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,
@@ -57,4 +61,7 @@ export default {
   ...locale500,
   ...localeUserInfo,
   ...localeUserSetting,
+
+  // customer
+  ...localeFileList,
 };
