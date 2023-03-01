@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Pagination } from '@/types/global';
+import type { Pagination, ListResult } from '@/types/global';
 
 export interface FolderRecord {
   id: string;
@@ -8,6 +8,7 @@ export interface FolderRecord {
   created_at: Date;
   updated_at: Date;
   type: 'file' | 'folder'; // convenience
+  tags?: string[];
 }
 
 export type FileRecord = {
@@ -29,7 +30,7 @@ export type FileParams = {
 } & Pagination;
 
 export function getFileList(params?: Partial<FileParams>) {
-  return axios.get<NodeRecord[]>('/api/filelist', {
+  return axios.get<ListResult<NodeRecord[]>>('/api/filelist', {
     params,
   });
 }
