@@ -24,7 +24,7 @@
       "eslint --fix"
     ],
     "*.{less,scss,css}": [
-      "stylelint --fix",
+      "stylelint --fix --custom-syntax postcss",
       "prettier --write"
     ]
   },
@@ -72,6 +72,7 @@
     "mockjs": "^1.1.0",
     "postcss": "^8.4.21",
     "postcss-html": "^1.5.0",
+    "postcss-less": "^6.0.0",
     "postcss-scss": "^4.0.6",
     "prettier": "^2.7.1",
     "rollup": "^2.79.1",
