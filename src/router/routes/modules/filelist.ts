@@ -15,7 +15,7 @@ const FileList: AppRouteRecordRaw = {
     {
       name: 'file.all',
       path: 'all',
-      component: null,
+      component: () => import('@/views/filelist/all/index.vue'),
       meta: {
         locale: 'menu.filelist.all',
         requiresAuth: true,
@@ -25,7 +25,7 @@ const FileList: AppRouteRecordRaw = {
     {
       name: 'file.latest',
       path: 'latest',
-      component: null,
+      component: () => import('@/views/filelist/latest/index.vue'),
       meta: {
         locale: 'menu.filelist.latest',
         requiresAuth: true,
@@ -35,7 +35,7 @@ const FileList: AppRouteRecordRaw = {
     {
       name: 'file.collection',
       path: 'collection',
-      component: null,
+      component: () => import('@/views/filelist/collection/index.vue'),
       meta: {
         locale: 'menu.filelist.collection',
         requiresAuth: true,
@@ -45,7 +45,7 @@ const FileList: AppRouteRecordRaw = {
     {
       name: 'file.share',
       path: 'share',
-      component: null,
+      component: () => import('@/views/filelist/shares/index.vue'),
       meta: {
         locale: 'menu.filelist.share',
         requiresAuth: true,
@@ -55,7 +55,7 @@ const FileList: AppRouteRecordRaw = {
     {
       name: 'file.recycle',
       path: 'recycle',
-      component: null,
+      component: () => import('@/views/filelist/recycle/index.vue'),
       meta: {
         locale: 'menu.filelist.recycle',
         requiresAuth: true,

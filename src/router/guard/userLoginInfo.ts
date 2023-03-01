@@ -33,7 +33,8 @@ export default function setupUserLoginInfoGuard(router: Router) {
         }
       }
     } else {
-      // require login
+      // require login，if to.name 可以防止beforeEach无限循环
+      // see https://www.cnblogs.com/tugenhua0707/p/10125535.html
 
       if (to.name === 'login') {
         next();
