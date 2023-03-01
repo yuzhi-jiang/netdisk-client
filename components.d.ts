@@ -15,11 +15,13 @@ declare module '@vue/runtime-core' {
     ABreadcrumb: typeof import('@arco-design/web-vue')['Breadcrumb'];
     ABreadcrumbItem: typeof import('@arco-design/web-vue')['BreadcrumbItem'];
     AButton: typeof import('@arco-design/web-vue')['Button'];
+    AButtonGroup: typeof import('@arco-design/web-vue')['ButtonGroup'];
     ACard: typeof import('@arco-design/web-vue')['Card'];
     ACarousel: typeof import('@arco-design/web-vue')['Carousel'];
     ACarouselItem: typeof import('@arco-design/web-vue')['CarouselItem'];
     ACascader: typeof import('@arco-design/web-vue')['Cascader'];
     ACheckbox: typeof import('@arco-design/web-vue')['Checkbox'];
+    ACheckboxGroup: typeof import('@arco-design/web-vue')['CheckboxGroup'];
     ACol: typeof import('@arco-design/web-vue')['Col'];
     AConfigProvider: typeof import('@arco-design/web-vue')['ConfigProvider'];
     ADescriptions: typeof import('@arco-design/web-vue')['Descriptions'];
@@ -32,6 +34,7 @@ declare module '@vue/runtime-core' {
     AGrid: typeof import('@arco-design/web-vue')['Grid'];
     AGridItem: typeof import('@arco-design/web-vue')['GridItem'];
     AInput: typeof import('@arco-design/web-vue')['Input'];
+    AInputGroup: typeof import('@arco-design/web-vue')['InputGroup'];
     AInputNumber: typeof import('@arco-design/web-vue')['InputNumber'];
     AInputPassword: typeof import('@arco-design/web-vue')['InputPassword'];
     AInputSearch: typeof import('@arco-design/web-vue')['InputSearch'];
@@ -68,6 +71,7 @@ declare module '@vue/runtime-core' {
     ATag: typeof import('@arco-design/web-vue')['Tag'];
     ATextarea: typeof import('@arco-design/web-vue')['Textarea'];
     ATooltip: typeof import('@arco-design/web-vue')['Tooltip'];
+    ATrigger: typeof import('@arco-design/web-vue')['Trigger'];
     ATypographyParagraph: typeof import('@arco-design/web-vue')['TypographyParagraph'];
     ATypographyText: typeof import('@arco-design/web-vue')['TypographyText'];
     ATypographyTitle: typeof import('@arco-design/web-vue')['TypographyTitle'];

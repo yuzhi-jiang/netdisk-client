@@ -45,6 +45,7 @@ export default function configStyleImportPlugin() {
             'option',
             'optgroup',
             'icon',
+            'button-group',
           ];
           // List of components that need to map imported styles
           // 需要映射引入样式的组件列表
