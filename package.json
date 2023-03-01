@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vite --config ./config/vite.config.dev.ts",
     "build": "vue-tsc --noEmit && vite build --config ./config/vite.config.prod.ts",
+    "build:dev": "vue-tsc --noEmit && vite build --config ./config/vite.config.prod.ts --mode development",
     "report": "cross-env REPORT=true npm run build",
     "preview": "npm run build && vite preview --host",
     "type:check": "vue-tsc --noEmit --skipLibCheck",
@@ -51,6 +52,7 @@
     "@intlify/core-base": "^9.2.2",
     "@types/lodash": "^4.14.186",
     "@types/mockjs": "^1.0.7",
+    "@types/node": "^18.14.2",
     "@types/nprogress": "^0.2.0",
     "@types/sortablejs": "^1.15.0",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
@@ -58,6 +60,7 @@
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
     "@vue/babel-plugin-jsx": "^1.1.1",
+    "@vue/runtime-core": "^3.2.47",
     "consola": "^2.15.3",
     "cross-env": "^7.0.3",
     "eslint": "^8.25.0",

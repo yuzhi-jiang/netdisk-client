@@ -66,5 +66,8 @@ module.exports = {
     'no-param-reassign': 0,
     'prefer-regex-literals': 0,
     'import/no-extraneous-dependencies': 0,
+
+    // Unable to resolve path to module报错
+    // see https://blog.csdn.net/qq_42917144/article/details/117021528
   },
 };

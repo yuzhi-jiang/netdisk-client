@@ -12,6 +12,7 @@ specifiers:
   '@intlify/core-base': ^9.2.2
   '@types/lodash': ^4.14.186
   '@types/mockjs': ^1.0.7
+  '@types/node': ^18.14.2
   '@types/nprogress': ^0.2.0
   '@types/sortablejs': ^1.15.0
   '@typescript-eslint/eslint-plugin': ^5.40.0
@@ -19,6 +20,7 @@ specifiers:
   '@vitejs/plugin-vue': ^4.0.0
   '@vitejs/plugin-vue-jsx': ^3.0.0
   '@vue/babel-plugin-jsx': ^1.1.1
+  '@vue/runtime-core': ^3.2.47
   '@vueuse/core': ^9.3.0
   axios: ^0.24.0
   consola: ^2.15.3
@@ -93,6 +95,7 @@ devDependencies:
   '@intlify/core-base': 9.2.2
   '@types/lodash': 4.14.191
   '@types/mockjs': 1.0.7
+  '@types/node': 18.14.2
   '@types/nprogress': 0.2.0
   '@types/sortablejs': 1.15.0
   '@typescript-eslint/eslint-plugin': 5.54.0_6mj2wypvdnknez7kws2nfdgupi
@@ -100,6 +103,7 @@ devDependencies:
   '@vitejs/plugin-vue': 4.0.0_vite@3.2.5+vue@3.2.47
   '@vitejs/plugin-vue-jsx': 3.0.0_vite@3.2.5+vue@3.2.47
   '@vue/babel-plugin-jsx': 1.1.1
+  '@vue/runtime-core': 3.2.47
   consola: 2.15.3
   cross-env: 7.0.3
   eslint: 8.35.0
@@ -129,7 +133,7 @@ devDependencies:
   stylelint-order: 5.0.0_stylelint@14.16.1
   typescript: 4.9.5
   unplugin-vue-components: 0.22.12_rollup@2.79.1+vue@3.2.47
-  vite: 3.2.5_less@4.1.3
+  vite: 3.2.5_wo3ja2wlu6ln7oswoqdxkdudlq
   vite-plugin-compression: 0.5.1_vite@3.2.5
   vite-plugin-eslint: 1.8.1_eslint@8.35.0+vite@3.2.5
   vite-plugin-imagemin: 0.6.1_vite@3.2.5
@@ -1191,7 +1195,7 @@ packages:
       '@babel/core': 7.21.0
       '@babel/plugin-transform-typescript': 7.21.0_@babel+core@7.21.0
       '@vue/babel-plugin-jsx': 1.1.1_@babel+core@7.21.0
-      vite: 3.2.5_less@4.1.3
+      vite: 3.2.5_wo3ja2wlu6ln7oswoqdxkdudlq
       vue: 3.2.47
     transitivePeerDependencies:
       - supports-color
@@ -1204,7 +1208,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 3.2.5_less@4.1.3
+      vite: 3.2.5_wo3ja2wlu6ln7oswoqdxkdudlq
       vue: 3.2.47
     dev: true
 
@@ -8567,7 +8571,7 @@ packages:
       chalk: 4.1.2
       debug: 4.3.4
       fs-extra: 10.1.0
-      vite: 3.2.5_less@4.1.3
+      vite: 3.2.5_wo3ja2wlu6ln7oswoqdxkdudlq
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8582,7 +8586,7 @@ packages:
       '@types/eslint': 8.21.1
       eslint: 8.35.0
       rollup: 2.79.1
-      vite: 3.2.5_less@4.1.3
+      vite: 3.2.5_wo3ja2wlu6ln7oswoqdxkdudlq
     dev: true
 
   /vite-plugin-imagemin/0.6.1_vite@3.2.5:
@@ -8613,7 +8617,7 @@ packages:
       imagemin-webp: 6.1.0
       jpegtran-bin: 6.0.1
       pathe: 0.2.0
-      vite: 3.2.5_less@4.1.3
+      vite: 3.2.5_wo3ja2wlu6ln7oswoqdxkdudlq
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8629,7 +8633,7 @@ packages:
       es-module-lexer: 0.9.3
       fs-extra: 10.1.0
       magic-string: 0.25.9
-      vite: 3.2.5_less@4.1.3
+      vite: 3.2.5_wo3ja2wlu6ln7oswoqdxkdudlq
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8641,7 +8645,7 @@ packages:
       svgo: 2.8.0
     dev: true
 
-  /vite/3.2.5_less@4.1.3:
+  /vite/3.2.5_wo3ja2wlu6ln7oswoqdxkdudlq:
     resolution: {integrity: sha512-4mVEpXpSOgrssFZAOmGIr85wPHKvaDAcXqxVxVRZhljkJOMZi1ibLibzjLHzJvcok8BMguLc7g1W6W/GqZbLdQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -8666,6 +8670,7 @@ packages:
       terser:
         optional: true
     dependencies:
+      '@types/node': 18.14.2
       esbuild: 0.15.18
       less: 4.1.3
       postcss: 8.4.21
