@@ -4,4 +4,7 @@ export default {
   'filelist.updated_at': '修改日期',
   'filelist.type': '类型',
   'filelist.size': '大小',
+
+  'folder': '文件夹',
+  'file': '文件',
 };

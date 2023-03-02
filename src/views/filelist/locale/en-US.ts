@@ -4,4 +4,7 @@ export default {
   'filelist.updated_at': 'updated',
   'filelist.type': 'type',
   'filelist.size': 'size',
+
+  'folder': 'folder',
+  'file': 'file',
 };
