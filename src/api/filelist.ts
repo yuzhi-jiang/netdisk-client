@@ -30,7 +30,7 @@ export type FileParams = {
 } & Pagination;
 
 export function getFileList(params?: Partial<FileParams>) {
-  return axios.get<ListResult<NodeRecord[]>>('/api/filelist', {
+  return axios.get<ListResult<NodeRecord>>('/api/filelist', {
     params,
   });
 }
