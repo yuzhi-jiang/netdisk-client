@@ -1,12 +1,14 @@
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
+  import { ref, computed } from 'vue';
   import { listenerRouteChange } from '@/utils/route-listener';
   import { getFileList } from '@/api/filelist';
-  import type { NodeRecord } from '@/api/filelist';
   import List from '@/components/list/index.vue';
+  import { formatList } from './utils';
   import useColumns from './use-columns';
+  import useMaxCount from './use-max-count';
 
   const { columns } = useColumns();
+  const { routes, maxCount } = useMaxCount();
 
   const listRef = ref<InstanceType<typeof List>>();
 
@@ -14,24 +16,13 @@
     listRef.value?.reload();
   };
 
-  const formatList = (list: NodeRecord[]) => {
-    // you can use algorithm to swap folder and file
-    const folders: NodeRecord[] = [];
-    const files: NodeRecord[] = [];
-    list.forEach((item) => {
-      if (item.type === 'folder') {
-        folders.push(item);
-      } else {
-        files.push(item);
-      }
-    });
-    return [...folders, ...files];
-  };
+  const getPath = (id: string, parentId: string) => {};
 
   const request = async (params = {}) => {
     const { data } = await getFileList(params);
     if (data?.list) {
       return {
+        // must be format
         data: formatList(data.list),
         total: data.total,
       };
@@ -47,14 +38,19 @@
   <div class="container">
     <List ref="listRef" :columns="columns" :request="request">
       <template #name="{ row, record }">
-        <a href="/" class="netdisk-table-tr__name">
+        <!-- :href="`/#/filelist/all/${record.type}/${record.id}`" -->
+        <router-link
+          :to="`/filelist/all/${record.type}/${record.id}`"
+          class="netdisk-table-tr__name"
+        >
           <IconFont
             :type="record.type === 'folder' ? 'icon-wenjianjia2' : 'icon-file2'"
             :size="18"
             style="vertical-align: sub"
           />
-          {{ row }}
-        </a>
+          <!-- {{ row }} -->
+          <span style="margin-left: 6px">{{ row }}</span>
+        </router-link>
       </template>
     </List>
   </div>
