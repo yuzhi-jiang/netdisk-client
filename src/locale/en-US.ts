@@ -32,7 +32,6 @@ export default {
   'menu.server.workplace': 'Workplace-Server',
   'menu.server.monitor': 'Monitor-Server',
   'menu.list': 'List',
-  'menu.filelist': 'FileList',
   'menu.result': 'Result',
   'menu.exception': 'Exception',
   'menu.form': 'Form',
@@ -43,6 +42,13 @@ export default {
   'menu.faq': 'FAQ',
   'navbar.docs': 'Docs',
   'navbar.action.locale': 'Switch to English',
+  // customer
+  'menu.filelist': 'File List',
+  'menu.filelist.all': 'All Files',
+  'menu.filelist.latest': 'Recent Files',
+  'menu.filelist.collection': 'Collections',
+  'menu.filelist.share': 'File Sharing',
+  'menu.filelist.recycle': 'File Recycle',
 
   ...localeSettings,
   ...localeMessageBox,
