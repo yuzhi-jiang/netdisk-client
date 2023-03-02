@@ -17,7 +17,7 @@ import Breadcrumb from './breadcrumb/index.vue';
 
 export interface IGlobalInstallOptions {
   iconfont: string;
-  [p: string]: any;
+  [p: string]: unknown;
 }
 
 // Manually introduce ECharts modules to reduce packing size

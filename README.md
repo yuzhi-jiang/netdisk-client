@@ -1,8 +1,14 @@
-这是网盘系统前台项目，使用vue开发
+这是网盘系统前台项目，使用 vue 开发
+
+### record
+
+Global Component
+
+- IconFont
 
 ### process
 
-``js
+```js
 listenerRouteChange((to) => {
   console.log(to);
 });
