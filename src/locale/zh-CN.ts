@@ -43,6 +43,7 @@ export default {
   'navbar.docs': '文档中心',
   'navbar.action.locale': '切换为中文',
   // customer
+  'menu.title': 'Netdisk',
   'menu.filelist': '我的文件',
   'menu.filelist.all': '所有文件',
   'menu.filelist.latest': '最常使用',

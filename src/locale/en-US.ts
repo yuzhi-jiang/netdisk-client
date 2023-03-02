@@ -43,6 +43,7 @@ export default {
   'navbar.docs': 'Docs',
   'navbar.action.locale': 'Switch to English',
   // customer
+  'menu.title': 'Netdisk',
   'menu.filelist': 'File List',
   'menu.filelist.all': 'All Files',
   'menu.filelist.latest': 'Recent Files',

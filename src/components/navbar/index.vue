@@ -7,7 +7,7 @@
           :style="{ margin: 0, fontSize: '18px' }"
           :heading="5"
         >
-          Netdisk
+          {{ $t('menu.title') }}
         </a-typography-title>
         <icon-menu-fold
           v-if="appStore.device === 'mobile'"
