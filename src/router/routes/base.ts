@@ -10,6 +10,7 @@ export const REDIRECT_MAIN: RouteRecordRaw = {
   meta: {
     requiresAuth: true,
     hideInMenu: true,
+    noAffix: true, // It will not appear in the tabbar
   },
   children: [
     {
@@ -19,6 +20,7 @@ export const REDIRECT_MAIN: RouteRecordRaw = {
       meta: {
         requiresAuth: true,
         hideInMenu: true,
+        noAffix: true, // It will not appear in the tabbar
       },
     },
   ],
@@ -28,4 +30,8 @@ export const NOT_FOUND_ROUTE: RouteRecordRaw = {
   path: '/:pathMatch(.*)*',
   name: 'notFound',
   component: () => import('@/views/not-found/index.vue'),
+  meta: {
+    requiresAuth: false,
+    noAffix: true, // It will not appear in the tabbar
+  },
 };
