@@ -25,5 +25,9 @@ export default function useMaxCount() {
     return 0; // unlimited
   });
 
-  return { routes, maxCount };
+  const setRoutes = (ros: BreadcrumbRoute[]) => {
+    routes.value = ros;
+  };
+
+  return { routes, maxCount, setRoutes };
 }
