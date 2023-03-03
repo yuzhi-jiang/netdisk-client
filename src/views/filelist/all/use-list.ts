@@ -1,4 +1,5 @@
 import { useI18n } from 'vue-i18n';
+import { IconPlus, IconDelete } from '@arco-design/web-vue/es/icon';
 import type { IColumn } from '@/components/list/types';
 import type { NodeRecord } from '@/api/filelist';
 
@@ -47,9 +48,41 @@ export default function useList() {
       prop: 'size',
       sortable: true,
       // defaultSortOrder: 'descend' as const,
-      width: 100,
+      width: 70,
     },
   ];
 
-  return { columns };
+  const toolbar = [
+    {
+      key: 'search',
+      comp: 'input',
+      placeholder: 'filelist.toolbar.input.placeholder',
+    },
+    {
+      key: 'create',
+      icon: IconPlus,
+    },
+    {
+      key: 'bulk-delete',
+      icon: IconDelete,
+      type: 'text' as const,
+      bulk: true,
+      confirm: true,
+      confirmText: 'list.actions.confirm.bulk-delete',
+    },
+  ];
+
+  const actions = [
+    {
+      key: 'update',
+    },
+    {
+      key: 'delete',
+      status: 'danger' as const,
+      confirm: true,
+      confirmText: 'list.actions.confirm.delete',
+    },
+  ];
+
+  return { columns, toolbar, actions };
 }
