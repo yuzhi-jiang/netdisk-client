@@ -26,6 +26,7 @@ axios.interceptors.request.use(
       if (!config.headers) {
         config.headers = {};
       }
+      // should be config
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;

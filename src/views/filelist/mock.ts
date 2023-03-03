@@ -17,7 +17,7 @@ setupMock({
           'updated_at': "@now('second')",
           'type|1': ['folder', 'file'],
           'file_extension': '',
-          'size': '@integer(0,100000)',
+          'size': '@integer(0,10000000000000)',
         })
       );
       const data = { list, total };

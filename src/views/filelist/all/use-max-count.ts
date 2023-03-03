@@ -1,8 +1,13 @@
 import { ref, computed } from 'vue';
 import { BreadcrumbRoute } from '@arco-design/web-vue';
 
-export default function useMaxCount() {
-  const routes = ref<BreadcrumbRoute[]>();
+export default function useMaxCount(prefix = '/filelist/all') {
+  const routes = ref<BreadcrumbRoute[]>([
+    {
+      label: '/',
+      path: '/',
+    },
+  ]);
   const maxCount = computed(() => {
     const breadWidth = (window.innerWidth / 3) * 2; // convenience, breadcrumb
     const targets = routes.value?.reduce(

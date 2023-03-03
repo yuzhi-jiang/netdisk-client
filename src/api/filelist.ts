@@ -24,12 +24,17 @@ export type FileRecord = {
 export type NodeRecord = Partial<FileRecord>;
 
 export type FileParams = {
-  path: string;
-  filters: string;
-  sort: string;
+  page: string;
+  search: string;
+  type: 'folder' | 'file';
+  order: string;
+  fileId: string;
+  parentId: string;
 } & Pagination;
 
-export function getFileList(params?: Partial<FileParams>) {
+export type ReqParams = Partial<FileParams>;
+
+export function getFileList(params?: ReqParams) {
   return axios.get<ListResult<NodeRecord>>('/api/filelist', {
     params,
   });
