@@ -25,6 +25,7 @@ import localeUserSetting from '@/views/user/setting/locale/zh-CN';
 import localeFileList from '@/views/filelist/locale/zh-CN';
 
 import localeSettings from './zh-CN/settings';
+import { importAllLocale } from './utils';
 
 export default {
   'menu.dashboard': '仪表盘',
@@ -42,6 +43,31 @@ export default {
   'menu.faq': '常见问题',
   'navbar.docs': '文档中心',
   'navbar.action.locale': '切换为中文',
+
+  // global
+  'modal.okText': '确定',
+  'modal.cancelText': '取消',
+  'modal.deleteTitle': '删除警告',
+  'modal.deleteContent': '是否删除？',
+  'message.operationSuccess': '操作成功',
+  'message.deleteSuccess': '删除成功',
+  'message.deleteFail': '删除失败',
+  'message.addSuccess': '添加成功',
+  'message.addFail': '添加失败',
+  'message.warning.noSelected': '未选择数据',
+  'common.bulkDelete': '批量删除',
+  'common.selected': '已选',
+  'common.checkAll': '全选',
+  'common.reset': '重置',
+  'common.reload': '刷新',
+  'common.copy': '复制',
+  'common.delete': '删除',
+  'common.detail': '详情',
+  'common.preview': '预览',
+  'common.back': '返回',
+  'common.operations': '操作',
+  'common.notification': '提示',
+
   // customer
   'menu.title': 'Netdisk',
   'menu.filelist': '我的文件',
@@ -71,4 +97,5 @@ export default {
 
   // customer
   ...localeFileList,
+  ...importAllLocale('zh-CN'),
 };
