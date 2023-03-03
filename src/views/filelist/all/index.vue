@@ -1,24 +1,26 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue';
-  import { listenerRouteChange } from '@/utils/route-listener';
-  import { getFileList } from '@/api/filelist';
+  import { ref } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { ReqParams, getFileList } from '@/api/filelist';
   import List from '@/components/list/index.vue';
-  import { formatList } from './utils';
-  import useColumns from './use-columns';
+  import { formatList, formatSize, paramsAdapter } from './utils';
+  import useList from './use-list';
   import useMaxCount from './use-max-count';
 
-  const { columns } = useColumns();
+  const { columns, toolbar, actions } = useList();
   const { routes, maxCount } = useMaxCount();
-
   const listRef = ref<InstanceType<typeof List>>();
+  const states = {
+    reqParams: {} as ReqParams, // request params
+  };
 
   const onSuccess = () => {
     listRef.value?.reload();
   };
 
-  const getPath = (id: string, parentId: string) => {};
-
   const request = async (params = {}) => {
+    params = paramsAdapter(params, states.reqParams);
+    console.log(params);
     const { data } = await getFileList(params);
     if (data?.list) {
       return {
@@ -32,11 +34,29 @@
       total: 0,
     };
   };
+
+  /**
+   * 指定路由进入渲染，携带参数
+   * current route is filelist/all/:type/:parent_id
+   */
+  const $route = useRoute();
+  const { params, query } = $route;
+  if (Object.keys(params).length !== 0) {
+    // appoint a folder, can't find a way to define the route type
+    const { type, parentId } = params as ReqParams;
+    states.reqParams = { type, parentId };
+  }
 </script>
 
 <template>
-  <div class="container">
-    <List ref="listRef" :columns="columns" :request="request">
+  <a-space direction="vertical" class="container">
+    <a-breadcrumb :max-count="maxCount" :routes="routes" />
+    <List
+      ref="listRef"
+      :toolbar="toolbar"
+      :columns="columns"
+      :request="request"
+    >
       <template #name="{ row, record }">
         <!-- :href="`/#/filelist/all/${record.type}/${record.id}`" -->
         <router-link
@@ -52,8 +72,16 @@
           <span style="margin-left: 6px">{{ row }}</span>
         </router-link>
       </template>
+
+      <!-- you can formatSize in formatList -->
+      <template #size="{ row }">
+        <span class="netdisk-table-tr__size">{{ formatSize(row) }}</span>
+        <!-- <span style="float: right; text-align: right"> -->
+        <!-- <a-tooltip style="float: right; text-align: right">{{ formatSize(row) }}</a-tooltip> -->
+        <!-- </span> -->
+      </template>
     </List>
-  </div>
+  </a-space>
 </template>
 
 <style lang="less" scoped>
@@ -75,5 +103,12 @@
     font-size: 13px;
     text-decoration: none;
     cursor: pointer;
+  }
+
+  ::v-deep {
+    .arco-auto-tooltip:has(.netdisk-table-tr__size) {
+      // float: right;
+      text-align: right;
+    }
   }
 </style>
