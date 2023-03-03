@@ -2,7 +2,7 @@ import { useI18n } from 'vue-i18n';
 import type { IColumn } from '@/components/list/types';
 import type { NodeRecord } from '@/api/filelist';
 
-export default function useColumns() {
+export default function useList() {
   const { t, d } = useI18n();
 
   const columns: IColumn[] = [
