@@ -18,3 +18,9 @@ router.beforeEach((to, from, next) => {
   next();
 });
 ```
+
+### 参数
+- 指定页面页数 page
+- 指定页面条数 pageSize - limit
+- 搜索内容key标识 search
+- 
