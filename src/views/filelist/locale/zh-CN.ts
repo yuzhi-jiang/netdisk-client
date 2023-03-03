@@ -7,4 +7,6 @@ export default {
 
   'folder': '文件夹',
   'file': '文件',
+
+  'filelist.toolbar.input.placeholder': '全局搜索文件',
 };
