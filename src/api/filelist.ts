@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import type { Pagination, ListResult } from '@/types/global';
 
 export interface FolderRecord {
@@ -37,8 +37,47 @@ export type ReqQueries = {
 };
 export type ReqParams = Partial<FileParams>;
 
+/**
+ * 获取文件列表
+ * @param {ReqParams} params
+ * @returns {AxiosResponse<ListResult<NodeRecord>>}
+ */
 export function getFileList(params?: ReqParams) {
   return axios.get<ListResult<NodeRecord>>('/api/filelist', {
     params,
   });
+}
+
+/**
+ * 创建文件/文件夹
+ * @returns {AxiosResponse}
+ */
+export function postNode() {
+  return axios.post('/api/filelist', {});
+}
+
+/**
+ * 修改文件/文件夹名称
+ * @returns {AxiosResponse}
+ */
+export function putNode() {
+  return axios.put('/api/filelist', {});
+}
+
+/**
+ * 删除文件/文件夹
+ * @param {String} id
+ * @returns {AxiosResponse}
+ */
+export function deleteNode(id: string) {
+  return axios.delete('/api/filelist', { data: { id } });
+}
+
+/**
+ * 批量删除文件/文件夹
+ * @param {String[]} ids
+ * @returns {AxiosResponse}
+ */
+export function deleteNodes(ids: string[] = []) {
+  return axios.delete('/api/filelist', { data: { ids } });
 }
