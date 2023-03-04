@@ -1,17 +1,47 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { useRoute } from 'vue-router';
-  import { ReqParams, getFileList } from '@/api/filelist';
+  import {
+    NodeRecord,
+    ReqParams,
+    ReqQueries,
+    getFileList,
+  } from '@/api/filelist';
   import List from '@/components/list/index.vue';
+  import { IAction } from '@/components/list/types';
   import { formatList, formatSize, paramsAdapter } from './utils';
   import useList from './use-list';
   import useMaxCount from './use-max-count';
+  import useInput from './use-input';
 
+  const $route = useRoute();
   const { columns, toolbar, actions } = useList();
   const { routes, maxCount } = useMaxCount();
+  const { content, clearInput, okSearch } = useInput();
   const listRef = ref<InstanceType<typeof List>>();
   const states = {
     reqParams: {} as ReqParams, // request params
+    reqQueries: {} as ReqQueries, // request queries
+  };
+
+  const iToolbar = [...toolbar] as const;
+  type Toolbar = (typeof iToolbar)[number]; // get const key
+  const onAction = async ({
+    action,
+    record,
+    selectedKeys,
+  }: {
+    action: IAction & Toolbar;
+    record: NodeRecord;
+    selectedKeys: number[];
+  }) => {
+    const { key } = action;
+    // console.log(key);
+    switch (key) {
+      case 'search':
+        break;
+      default:
+    }
   };
 
   const onSuccess = () => {
@@ -19,7 +49,7 @@
   };
 
   const request = async (params = {}) => {
-    params = paramsAdapter(params, states.reqParams);
+    params = paramsAdapter(params, states);
     console.log(params);
     const { data } = await getFileList(params);
     if (data?.list) {
@@ -35,28 +65,49 @@
     };
   };
 
-  /**
-   * 指定路由进入渲染，携带参数
-   * current route is filelist/all/:type/:parent_id
-   */
-  const $route = useRoute();
-  const { params, query } = $route;
-  if (Object.keys(params).length !== 0) {
-    // appoint a folder, can't find a way to define the route type
-    const { type, parentId } = params as ReqParams;
-    states.reqParams = { type, parentId };
-  }
+  const init = () => {
+    /**
+     * 指定路由进入渲染，携带参数
+     * current route is filelist/all/:type/:parent_id
+     */
+    const { params, query } = $route;
+    // appoint a folder, can't find a way to define the route type, like type, parentId
+    if (Object.keys(params).length !== 0) {
+      const { type, parentId } = params as ReqParams;
+      states.reqParams = { type, parentId };
+      // get_path() // 获取fullpath
+    }
+    if (Object.keys(query).length !== 0) {
+      const { search } = query as ReqQueries;
+      states.reqQueries = { search };
+    }
+  };
+  init();
 </script>
 
 <template>
   <a-space direction="vertical" class="container">
-    <a-breadcrumb :max-count="maxCount" :routes="routes" />
+    <!-- <a-breadcrumb :max-count="maxCount" :routes="routes" /> -->
     <List
       ref="listRef"
       :toolbar="toolbar"
       :columns="columns"
       :request="request"
+      @action="onAction"
     >
+      <template #search="{ action }: any">
+        <a-input-search
+          v-model="content"
+          :style="{ width: '280px', marginLeft: '8px' }"
+          :placeholder="$t(action.placeholder || '')"
+          search-button
+          allow-clear
+          @press-enter="okSearch(content)"
+          @clear="clearInput"
+          @search="okSearch(content)"
+        />
+      </template>
+
       <template #name="{ row, record }">
         <!-- :href="`/#/filelist/all/${record.type}/${record.id}`" -->
         <router-link
@@ -94,6 +145,7 @@
     ::v-deep {
       .arco-table-td {
         font-size: 13px;
+        border-bottom-color: rgb(226 226 226 / 30%);
       }
     }
   }
