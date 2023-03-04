@@ -1,4 +1,4 @@
-import type { NodeRecord, ReqParams } from '@/api/filelist';
+import type { NodeRecord, ReqParams, ReqQueries } from '@/api/filelist';
 
 export const formatList = (list: NodeRecord[]) => {
   // you can use algorithm to swap folder and file
@@ -30,14 +30,25 @@ export const formatSize = (size: number, accuracy = 0) => {
   return `${size.toFixed(accuracy)} ${units[idx]}`;
 };
 
-export const paramsAdapter = (tableParams: ReqParams, others: ReqParams) => {
+export const paramsAdapter = (
+  tableParams: ReqParams,
+  others: {
+    reqParams: ReqParams;
+    reqQueries: ReqQueries;
+  }
+) => {
   const { pageSize } = tableParams;
   // adapter
+  const { reqParams, reqQueries } = others;
+  const search = tableParams.search || reqQueries.search;
   const params = {
-    ...others,
+    ...reqQueries,
+    ...reqParams,
     ...tableParams,
+    search,
     limit: pageSize,
   };
+
   return params;
 };
 
