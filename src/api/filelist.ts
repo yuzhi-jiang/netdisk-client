@@ -32,6 +32,9 @@ export type FileParams = {
   parentId: string;
 } & Pagination;
 
+export type ReqQueries = {
+  search: string;
+};
 export type ReqParams = Partial<FileParams>;
 
 export function getFileList(params?: ReqParams) {
