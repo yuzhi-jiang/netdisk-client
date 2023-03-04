@@ -9,4 +9,7 @@ export default {
   'file': '文件',
 
   'filelist.toolbar.input.placeholder': '全局搜索文件',
+
+  // modal-form
+  'filelist.create.form.title': '新创建',
 };

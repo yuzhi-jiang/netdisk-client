@@ -13,32 +13,35 @@
   import useList from './use-list';
   import useMaxCount from './use-max-count';
   import useInput from './use-input';
+  import ModalForm from './components/modal-form.vue';
 
   const $route = useRoute();
   const { columns, toolbar, actions } = useList();
   const { routes, maxCount } = useMaxCount();
   const { content, clearInput, okSearch } = useInput();
   const listRef = ref<InstanceType<typeof List>>();
+  const modalRef = ref<InstanceType<typeof ModalForm>>();
   const states = {
     reqParams: {} as ReqParams, // request params
     reqQueries: {} as ReqQueries, // request queries
   };
 
-  const iToolbar = [...toolbar] as const;
-  type Toolbar = (typeof iToolbar)[number]; // get const key
   const onAction = async ({
     action,
     record,
     selectedKeys,
   }: {
-    action: IAction & Toolbar;
+    action: IAction;
     record: NodeRecord;
     selectedKeys: number[];
   }) => {
     const { key } = action;
-    // console.log(key);
     switch (key) {
-      case 'search':
+      case 'create':
+        modalRef.value?.init();
+        break;
+      case 'bulk-delete':
+        listRef.value?.reload();
         break;
       default:
     }
@@ -92,6 +95,7 @@
       ref="listRef"
       :toolbar="toolbar"
       :columns="columns"
+      :actions="[]"
       :request="request"
       @action="onAction"
     >
@@ -109,7 +113,6 @@
       </template>
 
       <template #name="{ row, record }">
-        <!-- :href="`/#/filelist/all/${record.type}/${record.id}`" -->
         <router-link
           :to="`/filelist/all/${record.type}/${record.id}`"
           class="netdisk-table-tr__name"
@@ -119,7 +122,6 @@
             :size="18"
             style="vertical-align: sub"
           />
-          <!-- {{ row }} -->
           <span style="margin-left: 6px">{{ row }}</span>
         </router-link>
       </template>
@@ -127,9 +129,6 @@
       <!-- you can formatSize in formatList -->
       <template #size="{ row }">
         <span class="netdisk-table-tr__size">{{ formatSize(row) }}</span>
-        <!-- <span style="float: right; text-align: right"> -->
-        <!-- <a-tooltip style="float: right; text-align: right">{{ formatSize(row) }}</a-tooltip> -->
-        <!-- </span> -->
       </template>
     </List>
   </a-space>
