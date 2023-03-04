@@ -52,3 +52,9 @@ export const isInputAction = (action: IAction): action is ActionInput =>
 
 export const isButtonAction = (action: IAction): action is ActionButton =>
   action?.comp === undefined || action?.comp === 'button';
+
+export type ActionInputRecord = {
+  search: string;
+  type: 'enter' | 'search' | 'clear';
+  [p: string]: unknown;
+};

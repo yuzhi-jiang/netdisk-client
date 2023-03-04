@@ -9,7 +9,13 @@
     TableExpandable,
   } from '@arco-design/web-vue/es/table';
   import { Pagination } from '@/types/global';
-  import { IAction, IColumn, isInputAction, isButtonAction } from './types';
+  import {
+    IAction,
+    IColumn,
+    ActionInputRecord,
+    isInputAction,
+    isButtonAction,
+  } from './types';
   import ListFilter from './list-filter.vue';
 
   export interface ListProp {
@@ -223,6 +229,12 @@
       } else {
         emits('action', { action, record, selectedKeys: selectedKeys.value });
       }
+    } else if (isInputAction(action)) {
+      emits('action', {
+        action,
+        record: record as ActionInputRecord,
+        selectedKeys: selectedKeys.value,
+      });
     } else {
       emits('action', { action, record, selectedKeys: selectedKeys.value });
     }
@@ -287,16 +299,23 @@
         </template>
       </a-space>
       <a-input-group v-if="inputToolbar">
-        <a-input-search
-          v-model="queryForm.search[inputToolbar.key]"
-          :style="{ width: '280px', marginLeft: '8px' }"
-          :placeholder="$t(inputToolbar.placeholder || '')"
-          search-button
-          allow-clear
-          @press-enter="reload"
-          @clear="reload"
-          @search="reload"
-        />
+        <!-- 使用插槽，并拓展onAction，可以保留以前写法而无需修改 -->
+        <slot
+          :name="inputToolbar.key"
+          :on-action="onAction"
+          :action="inputToolbar"
+        >
+          <a-input-search
+            v-model="queryForm.search[inputToolbar.key]"
+            :style="{ width: '280px', marginLeft: '8px' }"
+            :placeholder="$t(inputToolbar.placeholder || '')"
+            search-button
+            allow-clear
+            @press-enter="reload"
+            @clear="reload"
+            @search="reload"
+          />
+        </slot>
       </a-input-group>
     </div>
     <a-table
