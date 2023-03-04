@@ -4,8 +4,12 @@ import { BreadcrumbRoute } from '@arco-design/web-vue';
 export default function useMaxCount(prefix = '/filelist/all') {
   const routes = ref<BreadcrumbRoute[]>([
     {
-      label: '/',
-      path: '/',
+      label: 'Home',
+      path: '/filelist/all',
+    },
+    {
+      label: 'A',
+      path: '/filelist/all/folder/adsfasdfasdfasdfasdf',
     },
   ]);
   const maxCount = computed(() => {
