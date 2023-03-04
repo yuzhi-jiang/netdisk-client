@@ -131,6 +131,10 @@
     return { order: sortQuery };
   };
 
+  const setSelectAll = (checked: boolean) => {
+    tableRef.value?.selectAll(checked);
+  };
+
   const reload = async () => {
     const { current, pageSize } = pagination;
 
@@ -150,6 +154,7 @@
     };
     try {
       setLoading(true);
+      setSelectAll(false); // when reload, the selected key will be reset
       const res = await props.request(params);
       renderData.value = res.data;
       pagination.total = res.total;
@@ -163,10 +168,6 @@
   const reset = async () => {
     pagination.current = 1;
     reload();
-  };
-
-  const setSelectAll = (checked: boolean) => {
-    tableRef.value?.selectAll(checked);
   };
 
   const onFilter = () => {
