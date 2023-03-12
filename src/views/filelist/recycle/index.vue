@@ -88,66 +88,70 @@
 </script>
 
 <template>
-  <a-space direction="vertical" class="container">
-    <!-- <a-breadcrumb :max-count="maxCount" :routes="routes" /> -->
-    <List
-      ref="listRef"
-      :toolbar="toolbar"
-      :columns="columns"
-      :actions="[]"
-      :request="request"
-      @action="onAction"
-    >
-      <!-- acions.key -->
+  <div>
+    <a-space direction="vertical" class="container">
+      <!-- <a-breadcrumb :max-count="maxCount" :routes="routes" /> -->
+      <List
+        ref="listRef"
+        :toolbar="toolbar"
+        :columns="columns"
+        :actions="[]"
+        :request="request"
+        @action="onAction"
+      >
+        <!-- acions.key -->
 
-      <template #batch-recover="{ action, onAction }: any">
-        <ButtonAction
-          :action="action"
-          :on-action="onAction"
-          icon="icon-huifu1"
-          name="list.actions.batch-recover"
-        />
-      </template>
-
-      <template #batch-delete="{ action, onAction }: any">
-        <ButtonAction
-          :action="action"
-          :on-action="onAction"
-          icon="icon-shanchu"
-          icon-size="17"
-          name="list.actions.batch-delete"
-        />
-      </template>
-
-      <template #name="{ row, record }">
-        <!-- :to="`/filelist/all/${record.type}/${record.id}`" -->
-        <a-typography
-          class="netdisk-table-tr__name"
-          @click.stop="
-            onAction({
-              action: { key: 'show.info' },
-              record,
-            })
-          "
-        >
-          <IconFont
-            :type="record.type === 'folder' ? 'icon-wenjianjia2' : 'icon-file2'"
-            :size="18"
-            style="vertical-align: sub"
+        <template #batch-recover="{ action, onAction }: any">
+          <ButtonAction
+            :action="action"
+            :on-action="onAction"
+            icon="icon-huifu1"
+            name="list.actions.batch-recover"
           />
-          <span style="margin-left: 6px">{{ row }}</span>
-        </a-typography>
-      </template>
+        </template>
 
-      <!-- you can formatSize in formatList -->
-      <template #size="{ row, record }">
-        <span v-if="record.type === 'file'" class="netdisk-table-tr__size">
-          {{ formatSize(row) }}
-        </span>
-      </template>
-    </List>
-  </a-space>
-  <ModalForm ref="modalRef" @success="onSuccess" />
+        <template #batch-delete="{ action, onAction }: any">
+          <ButtonAction
+            :action="action"
+            :on-action="onAction"
+            icon="icon-shanchu"
+            icon-size="17"
+            name="list.actions.batch-delete"
+          />
+        </template>
+
+        <template #name="{ row, record }">
+          <!-- :to="`/filelist/all/${record.type}/${record.id}`" -->
+          <a-typography
+            class="netdisk-table-tr__name"
+            @click.stop="
+              onAction({
+                action: { key: 'show.info' },
+                record,
+              })
+            "
+          >
+            <IconFont
+              :type="
+                record.type === 'folder' ? 'icon-wenjianjia2' : 'icon-file2'
+              "
+              :size="18"
+              style="vertical-align: sub"
+            />
+            <span style="margin-left: 6px">{{ row }}</span>
+          </a-typography>
+        </template>
+
+        <!-- you can formatSize in formatList -->
+        <template #size="{ row, record }">
+          <span v-if="record.type === 'file'" class="netdisk-table-tr__size">
+            {{ formatSize(row) }}
+          </span>
+        </template>
+      </List>
+    </a-space>
+    <ModalForm ref="modalRef" @success="onSuccess" />
+  </div>
 </template>
 
 <style lang="less" scoped>

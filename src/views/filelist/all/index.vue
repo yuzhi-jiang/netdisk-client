@@ -93,94 +93,98 @@
 </script>
 
 <template>
-  <a-space direction="vertical" class="container">
-    <!-- <a-breadcrumb :max-count="maxCount" :routes="routes" /> -->
-    <List
-      ref="listRef"
-      :toolbar="toolbar"
-      :columns="columns"
-      :actions="[]"
-      :request="request"
-      @action="onAction"
-    >
-      <template #search="{ action }: any">
-        <a-input-search
-          v-model="content"
-          :style="{ width: '280px', marginLeft: '8px' }"
-          :placeholder="$t(action.placeholder || '')"
-          search-button
-          allow-clear
-          @press-enter="okSearch(content)"
-          @clear="clearInput"
-          @search="okSearch(content)"
-        />
-      </template>
-
-      <!-- acions.key -->
-      <template #create="{ action }: any">
-        <a-popover position="bl">
-          <a-button
-            v-if="action.trigger"
-            :type="action.type || 'primary'"
-            :status="action.status || 'normal'"
-          >
-            <template #icon>
-              <icon-more />
-            </template>
-          </a-button>
-          <template #content>
-            <a-list
-              size="small"
-              :bordered="false"
-              :split="false"
-              hoverable
-              style="user-select: none"
-            >
-              <a-list-item
-                v-for="item in triggers"
-                :key="item.label"
-                style="padding: 4px"
-                @click.stop="onAction({ action: { key: item.key } } as any)"
-              >
-                <a-link style="color: rgb(var(--gray-10))" :hoverable="false">
-                  <template #icon>
-                    <IconFont
-                      :type="item.icon"
-                      :size="20"
-                      style="vertical-align: middle"
-                    />
-                  </template>
-                  {{ $t(item.label) }}
-                </a-link>
-              </a-list-item>
-            </a-list>
-          </template>
-        </a-popover>
-      </template>
-
-      <template #name="{ row, record }">
-        <router-link
-          :to="`/filelist/all/${record.type}/${record.id}`"
-          class="netdisk-table-tr__name"
-        >
-          <IconFont
-            :type="record.type === 'folder' ? 'icon-wenjianjia2' : 'icon-file2'"
-            :size="18"
-            style="vertical-align: sub"
+  <div>
+    <a-space direction="vertical" class="container">
+      <!-- <a-breadcrumb :max-count="maxCount" :routes="routes" /> -->
+      <List
+        ref="listRef"
+        :toolbar="toolbar"
+        :columns="columns"
+        :actions="[]"
+        :request="request"
+        @action="onAction"
+      >
+        <template #search="{ action }: any">
+          <a-input-search
+            v-model="content"
+            :style="{ width: '280px', marginLeft: '8px' }"
+            :placeholder="$t(action.placeholder || '')"
+            search-button
+            allow-clear
+            @press-enter="okSearch(content)"
+            @clear="clearInput"
+            @search="okSearch(content)"
           />
-          <span style="margin-left: 6px">{{ row }}</span>
-        </router-link>
-      </template>
+        </template>
 
-      <!-- you can formatSize in formatList -->
-      <template #size="{ row, record }">
-        <span v-if="record.type === 'file'" class="netdisk-table-tr__size">
-          {{ formatSize(row) }}
-        </span>
-      </template>
-    </List>
-  </a-space>
-  <ModalForm ref="modalRef" @success="onSuccess" />
+        <!-- acions.key -->
+        <template #create="{ action }: any">
+          <a-popover position="bl">
+            <a-button
+              v-if="action.trigger"
+              :type="action.type || 'primary'"
+              :status="action.status || 'normal'"
+            >
+              <template #icon>
+                <icon-more />
+              </template>
+            </a-button>
+            <template #content>
+              <a-list
+                size="small"
+                :bordered="false"
+                :split="false"
+                hoverable
+                style="user-select: none"
+              >
+                <a-list-item
+                  v-for="item in triggers"
+                  :key="item.label"
+                  style="padding: 4px"
+                  @click.stop="onAction({ action: { key: item.key } } as any)"
+                >
+                  <a-link style="color: rgb(var(--gray-10))" :hoverable="false">
+                    <template #icon>
+                      <IconFont
+                        :type="item.icon"
+                        :size="20"
+                        style="vertical-align: middle"
+                      />
+                    </template>
+                    {{ $t(item.label) }}
+                  </a-link>
+                </a-list-item>
+              </a-list>
+            </template>
+          </a-popover>
+        </template>
+
+        <template #name="{ row, record }">
+          <router-link
+            :to="`/filelist/all/${record.type}/${record.id}`"
+            class="netdisk-table-tr__name"
+          >
+            <IconFont
+              :type="
+                record.type === 'folder' ? 'icon-wenjianjia2' : 'icon-file2'
+              "
+              :size="18"
+              style="vertical-align: sub"
+            />
+            <span style="margin-left: 6px">{{ row }}</span>
+          </router-link>
+        </template>
+
+        <!-- you can formatSize in formatList -->
+        <template #size="{ row, record }">
+          <span v-if="record.type === 'file'" class="netdisk-table-tr__size">
+            {{ formatSize(row) }}
+          </span>
+        </template>
+      </List>
+    </a-space>
+    <ModalForm ref="modalRef" @success="onSuccess" />
+  </div>
 </template>
 
 <style lang="less" scoped>
