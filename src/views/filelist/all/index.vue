@@ -127,8 +127,10 @@
       </template>
 
       <!-- you can formatSize in formatList -->
-      <template #size="{ row }">
-        <span class="netdisk-table-tr__size">{{ formatSize(row) }}</span>
+      <template #size="{ row, record }">
+        <span v-if="record.type === 'file'" class="netdisk-table-tr__size">
+          {{ formatSize(row) }}
+        </span>
       </template>
     </List>
   </a-space>

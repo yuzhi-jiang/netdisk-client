@@ -47,7 +47,13 @@ export default function useList() {
       title: 'filelist.size', // file.size
       prop: 'size',
       sortable: true,
-      // defaultSortOrder: 'descend' as const,
+      formatter: (row, rowIndex, record: NodeRecord) => {
+        console.log('record', 'record');
+        if (record.type === 'folder') {
+          return '';
+        }
+        return row;
+      },
       width: 70,
     },
   ];
