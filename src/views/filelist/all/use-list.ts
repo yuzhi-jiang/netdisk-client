@@ -67,6 +67,7 @@ export default function useList() {
     {
       key: 'create',
       icon: IconPlus,
+      trigger: true,
     },
     {
       key: 'bulk-delete',

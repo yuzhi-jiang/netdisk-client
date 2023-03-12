@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { useRoute } from 'vue-router';
+  import { IconMore } from '@arco-design/web-vue/es/icon';
   import {
     NodeRecord,
     ReqParams,
@@ -11,14 +12,14 @@
   import { IAction } from '@/components/list/types';
   import { formatList, formatSize, paramsAdapter } from './utils';
   import useList from './use-list';
-  import useMaxCount from './use-max-count';
   import useInput from './use-input';
+  import useTrigger from './use-trigger';
   import ModalForm from './components/modal-form.vue';
 
   const $route = useRoute();
   const { columns, toolbar, actions } = useList();
-  const { routes, maxCount } = useMaxCount();
   const { content, clearInput, okSearch } = useInput();
+  const { triggers } = useTrigger();
   const listRef = ref<InstanceType<typeof List>>();
   const modalRef = ref<InstanceType<typeof ModalForm>>();
   const states = {
@@ -32,13 +33,16 @@
     selectedKeys,
   }: {
     action: IAction;
-    record: NodeRecord;
-    selectedKeys: number[];
+    record?: NodeRecord;
+    selectedKeys?: number[];
   }) => {
     const { key } = action;
     switch (key) {
-      case 'create':
+      case 'create.dir':
         modalRef.value?.init();
+        break;
+      case 'upload.file':
+      case 'upload.dir':
         break;
       case 'bulk-delete':
         listRef.value?.reload();
@@ -112,6 +116,48 @@
         />
       </template>
 
+      <!-- acions.key -->
+      <template #create="{ action }: any">
+        <a-popover position="bl">
+          <a-button
+            v-if="action.trigger"
+            :type="action.type || 'primary'"
+            :status="action.status || 'normal'"
+          >
+            <template #icon>
+              <icon-more />
+            </template>
+          </a-button>
+          <template #content>
+            <a-list
+              size="small"
+              :bordered="false"
+              :split="false"
+              hoverable
+              style="user-select: none"
+            >
+              <a-list-item
+                v-for="item in triggers"
+                :key="item.label"
+                style="padding: 4px"
+                @click.stop="onAction({ action: { key: item.key } } as any)"
+              >
+                <a-link style="color: rgb(var(--gray-10))" :hoverable="false">
+                  <template #icon>
+                    <IconFont
+                      :type="item.icon"
+                      :size="20"
+                      style="vertical-align: middle"
+                    />
+                  </template>
+                  {{ $t(item.label) }}
+                </a-link>
+              </a-list-item>
+            </a-list>
+          </template>
+        </a-popover>
+      </template>
+
       <template #name="{ row, record }">
         <router-link
           :to="`/filelist/all/${record.type}/${record.id}`"
@@ -134,6 +180,7 @@
       </template>
     </List>
   </a-space>
+  <ModalForm ref="modalRef" />
 </template>
 
 <style lang="less" scoped>
@@ -148,6 +195,11 @@
         font-size: 13px;
         border-bottom-color: rgb(226 226 226 / 30%);
       }
+
+      .arco-auto-tooltip:has(.netdisk-table-tr__size) {
+        // float: right;
+        text-align: right;
+      }
     }
   }
 
@@ -156,12 +208,5 @@
     font-size: 13px;
     text-decoration: none;
     cursor: pointer;
-  }
-
-  ::v-deep {
-    .arco-auto-tooltip:has(.netdisk-table-tr__size) {
-      // float: right;
-      text-align: right;
-    }
   }
 </style>
