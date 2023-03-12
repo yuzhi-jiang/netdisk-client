@@ -1,7 +1,57 @@
 <script setup lang="ts">
+  import { ref } from 'vue';
+  import { useI18n } from 'vue-i18n';
+  import { Form, Message } from '@arco-design/web-vue';
+  import { validateFileName } from '@/utils/validate';
   import useVisible from '@/hooks/visible';
+  import useLoading from '@/hooks/loading';
+  import { Callback, FormSubmit } from '@/types/global';
 
+  const emits = defineEmits(['success']);
+
+  interface IForm {
+    folder: string;
+  }
+  const { t } = useI18n();
+  const genDefaultForm = (): IForm => ({ folder: '' });
   const { visible, setVisible } = useVisible();
+  const { loading, setLoading } = useLoading();
+
+  const formRef = ref<InstanceType<typeof Form>>();
+  const form = ref<IForm>(genDefaultForm());
+  const rules = {
+    folder: [
+      {
+        validator: (value: string, callback: Callback) => {
+          if (value && validateFileName(value)) {
+            return callback();
+          }
+          return callback(t('filelist.create.form.input.errMsg'));
+        },
+      },
+    ],
+  };
+
+  const close = () => {
+    setVisible(false);
+    formRef.value?.resetFields();
+  };
+
+  const onSubmit = async ({ errors }: FormSubmit) => {
+    if (errors) return;
+    // network
+    setLoading(true);
+    try {
+      //  api
+      // await postNode()
+      // case right case false
+      close();
+      emits('success');
+      Message.success(t('message.addSuccess'));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const init = (data?: any) => {
     setVisible(true);
@@ -18,6 +68,38 @@
     :unmount-on-close="true"
     title-align="start"
   >
-    Form
+    <a-form
+      ref="formRef"
+      :model="form"
+      :rules="rules"
+      auto-label-width
+      @submit="onSubmit"
+    >
+      <a-form-item
+        field="folder"
+        :label="$t('filelist.create.form.input.label')"
+        validate-trigger="input"
+        :rules="{
+          required: true,
+          message: $t('filelist.create.form.input.errMsg'),
+        }"
+      >
+        <a-input
+          v-model="form.folder"
+          :placeholder="$t('filelist.create.form.input.placeholder')"
+          allow-clear
+        />
+      </a-form-item>
+      <a-form-item>
+        <a-space>
+          <a-button html-type="submit">
+            {{ $t('form.actions.submit') }}
+          </a-button>
+          <a-button @click="close">
+            {{ $t('form.actions.cancel') }}
+          </a-button>
+        </a-space>
+      </a-form-item>
+    </a-form>
   </a-modal>
 </template>
