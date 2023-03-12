@@ -120,6 +120,16 @@
           />
         </template>
 
+        <template #all-clear="{ action, onAction }: any">
+          <ButtonAction
+            :action="action"
+            :on-action="onAction"
+            icon="icon-qingkong2"
+            icon-size="14"
+            name="list.actions.all-clear"
+          />
+        </template>
+
         <template #name="{ row, record }">
           <!-- :to="`/filelist/all/${record.type}/${record.id}`" -->
           <a-typography

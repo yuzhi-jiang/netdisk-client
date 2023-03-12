@@ -73,6 +73,12 @@ export default function useList() {
       confirm: true,
       confirmText: 'list.actions.confirm.batch-delete',
     },
+    {
+      key: 'all-clear',
+      type: 'text' as const,
+      confirm: true,
+      confirmText: 'list.actions.confirm.all-clear',
+    },
   ];
 
   const actions = [
