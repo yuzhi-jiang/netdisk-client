@@ -48,7 +48,6 @@ export default function useList() {
       prop: 'size',
       sortable: true,
       formatter: (row, rowIndex, record: NodeRecord) => {
-        console.log('record', 'record');
         if (record.type === 'folder') {
           return '';
         }
