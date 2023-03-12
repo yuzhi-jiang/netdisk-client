@@ -180,7 +180,7 @@
       </template>
     </List>
   </a-space>
-  <ModalForm ref="modalRef" />
+  <ModalForm ref="modalRef" @success="onSuccess" />
 </template>
 
 <style lang="less" scoped>

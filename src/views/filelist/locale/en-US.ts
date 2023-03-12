@@ -1,3 +1,5 @@
+import localeRecycle from '../recycle/locale/en-US';
+
 export default {
   'filelist.name': 'filename',
   'filelist.tags': 'tags',
@@ -18,4 +20,7 @@ export default {
   'filelist.create.form.input.label': 'Folder name',
   'filelist.create.form.input.placeholder': 'please enter a folder name ...',
   'filelist.create.form.input.errMsg': 'please enter a folder name',
+
+  // recycle
+  ...localeRecycle,
 };

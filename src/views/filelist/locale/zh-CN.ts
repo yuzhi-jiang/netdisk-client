@@ -1,3 +1,5 @@
+import localeRecycle from '../recycle/locale/zh-CN';
+
 export default {
   'filelist.name': '名称',
   'filelist.tags': '文件标签',
@@ -18,4 +20,7 @@ export default {
   'filelist.create.form.input.label': '文件夹名',
   'filelist.create.form.input.placeholder': '请输入文件夹名称',
   'filelist.create.form.input.errMsg': '请输入文件夹名称',
+
+  // recycle
+  ...localeRecycle,
 };
