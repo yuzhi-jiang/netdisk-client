@@ -21,6 +21,13 @@ export default {
   'filelist.create.form.input.placeholder': '请输入文件夹名称',
   'filelist.create.form.input.errMsg': '请输入文件夹名称',
 
+  'list.actions.batch-recover': '恢复',
+  'list.actions.batch-delete': '删除',
+  'list.actions.all-clear': '清空',
+  'list.actions.confirm.batch-recover': '是否确认恢复？',
+  'list.actions.confirm.batch-delete': '是否确认删除？',
+  'list.actions.confirm.all-clear': '是否确认清空？',
+
   // recycle
   ...localeRecycle,
 };

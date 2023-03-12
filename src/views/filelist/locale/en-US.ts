@@ -21,6 +21,13 @@ export default {
   'filelist.create.form.input.placeholder': 'please enter a folder name ...',
   'filelist.create.form.input.errMsg': 'please enter a folder name',
 
+  'list.actions.batch-recover': 'Recover',
+  'list.actions.batch-delete': 'Delete',
+  'list.actions.all-clear': 'Clear',
+  'list.actions.confirm.batch-recover': 'Are you sure to restore?',
+  'list.actions.confirm.batch-delete': 'Are you sure to delete?',
+  'list.actions.confirm.all-clear': 'Are you sure to clear?',
+
   // recycle
   ...localeRecycle,
 };
