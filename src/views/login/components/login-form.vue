@@ -55,10 +55,29 @@
         <a-button type="primary" html-type="submit" long :loading="loading">
           {{ $t('login.form.login') }}
         </a-button>
-        <a-button type="text" long class="login-form-register-btn">
-          {{ $t('login.form.register') }}
-        </a-button>
       </a-space>
+      <a-form-item>
+        <a-divider orientation="center">其他方式</a-divider>
+      </a-form-item>
+      <a-form-item>
+        <a-space :size="24" fill align="center">
+          <a-tooltip content="微信" mini>
+            <icon-wechat size="18" style="cursor: pointer" />
+          </a-tooltip>
+          <a-tooltip content="QQ" mini>
+            <icon-qq size="18" />
+          </a-tooltip>
+          <a-tooltip content="Github" mini>
+            <icon-github size="18" />
+          </a-tooltip>
+          <a-tooltip content="微博" mini>
+            <icon-weibo size="18" />
+          </a-tooltip>
+          <a-button type="text" class="login-form-register-btn">
+            没有账号？点击{{ $t('login.form.register') }}
+          </a-button>
+        </a-space>
+      </a-form-item>
     </a-form>
   </div>
 </template>

@@ -9,5 +9,5 @@ export default {
   'login.form.rememberPassword': '记住密码',
   'login.form.forgetPassword': '忘记密码',
   'login.form.login': '登录',
-  'login.form.register': '注册账号',
+  'login.form.register': '注册',
 };
