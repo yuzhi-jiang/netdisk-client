@@ -50,12 +50,10 @@ export function login(data: LoginData) {
 
   return axios.post<LoginRes>(
     'http://146.56.116.51:8082/front/user/login',
-    {
-      loginBo: data,
-    },
+    data,
     {
       params: {
-        type,
+        type, // query
       },
     }
   );
