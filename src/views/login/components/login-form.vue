@@ -179,6 +179,7 @@
   import type { LoginData } from '@/api/user';
   import { isMobile } from '@/utils/validate';
   import { getCaptcha, LoginType, getOAuthLink } from '@/api/user';
+  import { redirectHomeOrDefault } from '@/router/utils';
 
   const router = useRouter();
   const { t } = useI18n();
@@ -260,7 +261,7 @@
     values: Record<string, any>;
   }) => {
     if (loading.value || errors) return;
-    console.log(values);
+    // console.log(values);
     handleSubmit(values);
   };
 
@@ -270,8 +271,8 @@
       return;
     }
 
-    await getCaptcha(userInfo.mobile);
     state.captchaTime = 60;
+    await getCaptcha(userInfo.mobile);
     const timer = setInterval(() => {
       state.captchaTime -= 1;
       if (state.captchaTime === 0) {
@@ -286,11 +287,15 @@
     const target = window.open(url, 'Netdisk 登录页');
     // focus
 
-    const handleOpenWindow = (e: MessageEvent) => {
-      const { data } = e;
+    const handleOpenWindow = async (e: MessageEvent) => {
+      const data = JSON.parse(e.data);
+      // {"username":"azin-cn","mobile":"","imgPath":"https://avatars.githubusercontent.com/u/97966585?v=4","token":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOjM5LCJjcmVhdGVkIjoxNjc5MDYxMTk0NjM0LCJleHAiOjE2Nzk2NjU5OTQsInVzZXJuYW1lIjoiYXppbi1jbiJ9.rLLO-P-tMILrUauxfE9QAnxhhFasJMo6HYomiaXRFAk"}
+      // const { username, mobile, imgPath, token } = data;
       console.log(data);
+      await userStore.setInfo({ ...data, role: '*' });
       window.removeEventListener('message', handleOpenWindow);
       // 跳转路由
+      redirectHomeOrDefault();
     };
     window.addEventListener('message', handleOpenWindow);
     target?.focus();
