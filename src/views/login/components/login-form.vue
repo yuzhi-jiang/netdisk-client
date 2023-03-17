@@ -178,7 +178,7 @@
   import useLoading from '@/hooks/loading';
   import type { LoginData } from '@/api/user';
   import { isMobile } from '@/utils/validate';
-  import { getCaptcha, LoginType } from '@/api/user';
+  import { getCaptcha, LoginType, getOAuthLink } from '@/api/user';
 
   const router = useRouter();
   const { t } = useI18n();
@@ -281,15 +281,19 @@
   };
 
   const customerLogin = async (type: 'wx' | 'qq' | 'github' | 'weibo') => {
-    window.open();
+    const { data: url } = await getOAuthLink(type);
+
+    const target = window.open(url, 'Netdisk 登录页');
+    // focus
+
     const handleOpenWindow = (e: MessageEvent) => {
       const { data } = e;
       console.log(data);
       window.removeEventListener('message', handleOpenWindow);
       // 跳转路由
     };
-
     window.addEventListener('message', handleOpenWindow);
+    target?.focus();
   };
 
   const register = () => {

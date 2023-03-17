@@ -2,6 +2,8 @@ import axios from 'axios';
 import type { RouteRecordNormalized } from 'vue-router';
 import { UserState } from '@/store/modules/user/types';
 
+const baseURL = 'http://146.56.116.51:8082/front';
+
 export interface LoginData {
   account: string;
   password: string;
@@ -80,4 +82,10 @@ export function getCaptcha(
       [type]: account,
     },
   });
+}
+
+export type OAuthType = 'github' | 'wx' | 'qq' | 'weibo';
+
+export function getOAuthLink(type: OAuthType) {
+  return axios.get(`${baseURL}/oauth/login/${type}`);
 }
