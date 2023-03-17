@@ -18,7 +18,7 @@ const useUserStore = defineStore('user', {
     job: undefined,
     organization: undefined,
     location: undefined,
-    email: undefined,
+    // email: undefined,
     introduction: undefined,
     personalWebsite: undefined,
     jobName: undefined,
@@ -29,6 +29,13 @@ const useUserStore = defineStore('user', {
     accountId: undefined,
     certification: undefined,
     role: '',
+
+    user_id: undefined,
+    email: undefined,
+    imgPath: undefined,
+    mobile: undefined,
+    token: undefined,
+    username: undefined,
   }),
 
   getters: {
@@ -56,7 +63,8 @@ const useUserStore = defineStore('user', {
 
     // Get user's information
     async info() {
-      const res = await getUserInfo();
+      const { user_id: userid } = this.$state;
+      const res = await getUserInfo(userid);
 
       this.setInfo(res.data);
     },
@@ -75,12 +83,14 @@ const useUserStore = defineStore('user', {
     async login(loginForm: LoginData) {
       try {
         const { data } = await userLogin(loginForm);
+        this.setInfo(data);
         setToken(data.token);
       } catch (err) {
         clearToken();
         throw err;
       }
     },
+
     logoutCallBack() {
       const appStore = useAppStore();
       this.resetInfo();

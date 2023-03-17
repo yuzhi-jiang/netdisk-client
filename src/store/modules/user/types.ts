@@ -5,7 +5,7 @@ export interface UserState {
   job?: string;
   organization?: string;
   location?: string;
-  email?: string;
+  // email?: string;
   introduction?: string;
   personalWebsite?: string;
   jobName?: string;
@@ -16,4 +16,12 @@ export interface UserState {
   accountId?: string;
   certification?: number;
   role: RoleType;
+
+  // netdisk
+  user_id?: string;
+  email?: string;
+  imgPath?: string;
+  mobile?: string;
+  token?: string;
+  username?: string;
 }
