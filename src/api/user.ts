@@ -3,6 +3,7 @@ import type { RouteRecordNormalized } from 'vue-router';
 import { UserState } from '@/store/modules/user/types';
 
 const baseURL = 'http://146.56.116.51:8082/front';
+// const baseURL = 'http://192.168.196.80:8082/front';
 
 export interface LoginData {
   account: string;
@@ -50,23 +51,23 @@ export function login(data: LoginData) {
   const { type } = data;
   delete data.type;
 
-  return axios.post<LoginRes>(
-    'http://146.56.116.51:8082/front/user/login',
-    data,
-    {
-      params: {
-        type, // query
-      },
-    }
-  );
+  return axios.post<LoginRes>(`${baseURL}/user/login`, data, {
+    params: {
+      type, // query
+    },
+  });
 }
 
 export function logout() {
   return axios.post<LoginRes>('/api/user/logout');
 }
 
-export function getUserInfo() {
-  return axios.post<UserState>('/api/user/info');
+export function getUserInfo(userid: UserState['user_id'] = '') {
+  return axios.get<UserState>(`${baseURL}/user/userinfo`, {
+    headers: {
+      user_id: userid,
+    },
+  });
 }
 
 export function getMenuList() {
@@ -77,7 +78,7 @@ export function getCaptcha(
   account: string,
   type: 'mobile' | 'email' = 'mobile'
 ) {
-  return axios.get(`http://146.56.116.51:8082/front/captcha/${type}`, {
+  return axios.get(`${baseURL}/captcha/${type}`, {
     params: {
       [type]: account,
     },
