@@ -5,6 +5,7 @@ const FileList: AppRouteRecordRaw = {
   name: 'filelist',
   path: '/filelist',
   component: DEFAULT_LAYOUT,
+  redirect: '/filelist/all',
   meta: {
     locale: 'menu.filelist',
     requiresAuth: true,
