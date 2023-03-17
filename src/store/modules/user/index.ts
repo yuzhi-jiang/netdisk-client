@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import {
+  register as userRegister,
   login as userLogin,
   logout as userLogout,
   getUserInfo,
@@ -60,11 +61,21 @@ const useUserStore = defineStore('user', {
       this.setInfo(res.data);
     },
 
+    async register(loginForm: LoginData) {
+      try {
+        const res = await userRegister(loginForm);
+        setToken(res.data.token);
+      } catch (err) {
+        clearToken();
+        throw err;
+      }
+    },
+
     // Login
     async login(loginForm: LoginData) {
       try {
-        const res = await userLogin(loginForm);
-        setToken(res.data.token);
+        const { data } = await userLogin(loginForm);
+        setToken(data.token);
       } catch (err) {
         clearToken();
         throw err;
