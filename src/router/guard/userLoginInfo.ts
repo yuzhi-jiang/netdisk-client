@@ -28,6 +28,7 @@ export default function setupUserLoginInfoGuard(router: Router) {
       } else {
         try {
           // get user info
+          // 登录成功后便返回信息
           await userStore.info();
           next();
         } catch (error) {
