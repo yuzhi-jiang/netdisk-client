@@ -11,6 +11,15 @@ export default function setupUserLoginInfoGuard(router: Router) {
   router.beforeEach(async (to, from, next) => {
     NProgress.start();
     const userStore = useUserStore();
+
+    // 不进入login，而是指定定向到指定页面
+
+    console.log('beforeEach', to);
+    if (to.name === 'register') {
+      next();
+      return;
+    }
+
     if (isLogin()) {
       // isLogin, use token
 
