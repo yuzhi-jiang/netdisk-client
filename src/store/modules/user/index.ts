@@ -6,7 +6,7 @@ import {
   getUserInfo,
   LoginData,
 } from '@/api/user';
-import { setToken, clearToken } from '@/utils/auth';
+import { setToken, clearToken, getUserID, setUserID } from '@/utils/auth';
 import { removeRouteListener } from '@/utils/route-listener';
 import { UserState } from './types';
 import useAppStore from '../app';
@@ -30,12 +30,15 @@ const useUserStore = defineStore('user', {
     certification: undefined,
     role: '',
 
-    user_id: undefined,
+    userId: undefined,
     email: undefined,
     imgPath: undefined,
     mobile: undefined,
     token: undefined,
     username: undefined,
+
+    diskVo: undefined,
+    userVo: undefined,
   }),
 
   getters: {
@@ -63,10 +66,11 @@ const useUserStore = defineStore('user', {
 
     // Get user's information
     async info() {
-      const { user_id: userid } = this.$state;
-      const res = await getUserInfo(userid);
-
-      this.setInfo(res.data);
+      // 首先登录，其次获取info信息，如果刷新，则直接获取localStorage中的user_id
+      const userid = getUserID();
+      const { data } = await getUserInfo(userid as string);
+      console.log(data);
+      this.setInfo(data);
     },
 
     async register(loginForm: LoginData) {
@@ -83,8 +87,9 @@ const useUserStore = defineStore('user', {
     async login(loginForm: LoginData) {
       try {
         const { data } = await userLogin(loginForm);
-        this.setInfo(data);
-        setToken(data.token);
+        const { token, userId } = data;
+        setToken(token);
+        setUserID(userId);
       } catch (err) {
         clearToken();
         throw err;
