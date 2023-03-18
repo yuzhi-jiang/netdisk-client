@@ -72,7 +72,7 @@ const useUserStore = defineStore('user', {
     async register(loginForm: LoginData) {
       try {
         const res = await userRegister(loginForm);
-        setToken(res.data.token);
+        // setToken(res.data.token);
       } catch (err) {
         clearToken();
         throw err;

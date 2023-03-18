@@ -25,7 +25,25 @@ export function redirectHomeOrDefault() {
   });
 }
 
+export function redirectLogin() {
+  const { othersQuery } = getRouteQueries();
+  router.push({
+    name: 'login',
+    query: othersQuery,
+  });
+}
+
+export function redirectLoginOrDefault() {
+  const { redirect, othersQuery } = getRouteQueries();
+  router.push({
+    name: (redirect as string) || 'login',
+    query: othersQuery,
+  });
+}
+
 export default {
   redirectHome,
   redirectHomeOrDefault,
+  redirectLogin,
+  redirectLoginOrDefault,
 };
