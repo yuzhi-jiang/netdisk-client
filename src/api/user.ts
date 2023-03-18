@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { RouteRecordNormalized } from 'vue-router';
-import { UserState } from '@/store/modules/user/types';
 import { useCloned } from '@vueuse/core';
+import { UserState, UserInfoRecord } from '@/store/modules/user/types';
 
 // const baseURL = 'http://146.56.116.51:8082/front';
 const baseURL = 'http://192.168.196.80:8082/front';
@@ -41,6 +41,8 @@ export function register(data: LoginData) {
 }
 
 export interface LoginRes {
+  userId: string;
+  diskId: string;
   username: string;
   imgPath: string;
   mobile: string;
@@ -76,8 +78,20 @@ export function logout() {
  * @param userid 注册、登陆时获取的user_id
  * @returns { UserState } user_info
  */
-export function getUserInfo(userid: UserState['user_id'] = '') {
+export function getUserBaseInfo(userid: UserState['userId'] = '') {
   return axios.get<UserState>(`${baseURL}/user/userinfo`, {
+    headers: {
+      user_id: userid,
+    },
+  });
+}
+
+/**
+ * @param {UserState['user_id']} userid 注册、登录时获取的user_id
+ * @returns {UserState} user_info_all
+ */
+export function getUserInfo(userid: UserState['userId'] = '') {
+  return axios.get<UserInfoRecord>(`${baseURL}/user/userdisk`, {
     headers: {
       user_id: userid,
     },

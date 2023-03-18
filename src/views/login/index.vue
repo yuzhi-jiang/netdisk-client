@@ -14,6 +14,8 @@
 <script lang="ts" setup>
   import Footer from '@/components/footer/index.vue';
   import LoginForm from './components/login-form.vue';
+
+  document.title = 'Netdisk 登录页';
 </script>
 
 <style lang="less" scoped>

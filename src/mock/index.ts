@@ -13,8 +13,8 @@ import '@/views/list/search-table/mock';
 import '@/views/visualization/data-analysis/mock';
 import '@/views/visualization/multi-dimension-data-analysis/mock';
 
-import '@/views/user/info/mock';
-import '@/views/user/setting/mock';
+// import '@/views/user/info/mock';
+// import '@/views/user/setting/mock';
 
 // filelist
 import '@/views/filelist/mock';
