@@ -30,6 +30,7 @@ export interface UserVO {
   token: string;
   userId: string;
   username: string;
+  createTime: string;
 }
 
 export interface UserInfoRecord {
