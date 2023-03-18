@@ -18,7 +18,7 @@ import locale403 from '@/views/exception/403/locale/zh-CN';
 import locale404 from '@/views/exception/404/locale/zh-CN';
 import locale500 from '@/views/exception/500/locale/zh-CN';
 
-import localeUserInfo from '@/views/user/info/locale/zh-CN';
+// import localeUserInfo from '@/views/user/info/locale/zh-CN';
 import localeUserSetting from '@/views/user/setting/locale/zh-CN';
 
 // customer
@@ -92,7 +92,6 @@ export default {
   ...locale403,
   ...locale404,
   ...locale500,
-  ...localeUserInfo,
   ...localeUserSetting,
 
   // customer
