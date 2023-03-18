@@ -41,39 +41,8 @@ export function saveUserInfo() {
 
 export interface BasicInfoModel {
   email: string;
-  nickname: string;
-  countryRegion: string;
-  area: string;
-  address: string;
+  username: string;
   profile: string;
-}
-
-export interface EnterpriseCertificationModel {
-  accountType: number;
-  status: number;
-  time: string;
-  legalPerson: string;
-  certificateType: string;
-  authenticationNumber: string;
-  enterpriseName: string;
-  enterpriseCertificateType: string;
-  organizationCode: string;
-}
-
-export type CertificationRecord = Array<{
-  certificationType: number;
-  certificationContent: string;
-  status: number;
-  time: string;
-}>;
-
-export interface UnitCertification {
-  enterpriseInfo: EnterpriseCertificationModel;
-  record: CertificationRecord;
-}
-
-export function queryCertification() {
-  return axios.post<UnitCertification>('/api/user/certification');
 }
 
 export function userUploadApi(
