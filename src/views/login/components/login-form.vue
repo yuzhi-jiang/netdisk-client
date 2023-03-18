@@ -173,7 +173,7 @@
   import { Message } from '@arco-design/web-vue';
   import { ValidatedError } from '@arco-design/web-vue/es/form/interface';
   import { useI18n } from 'vue-i18n';
-  import { useStorage } from '@vueuse/core';
+  import { useCloned, useStorage } from '@vueuse/core';
   import { useUserStore } from '@/store';
   import useLoading from '@/hooks/loading';
   import type { LoginData } from '@/api/user';
@@ -212,6 +212,7 @@
 
   const handleSubmit = async (values: Record<string, any>) => {
     setLoading(true);
+    values = useCloned(values).cloned.value;
 
     const remember = () => {
       const { rememberPassword } = loginConfig.value;
