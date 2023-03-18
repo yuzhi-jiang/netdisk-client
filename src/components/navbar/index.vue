@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <div class="left-side">
-      <a-space style="cursor: pointer" @click="toHome">
+      <a-space style="cursor: pointer" @click="redirectHome">
         <img alt="logo" src="/images/favicon32.png" />
         <a-typography-title
           :style="{ margin: 0, fontSize: '18px' }"
@@ -146,16 +146,15 @@
 
 <script lang="ts" setup>
   import { computed, ref, inject } from 'vue';
-  import { useRouter } from 'vue-router';
   import { Message } from '@arco-design/web-vue';
   import { useDark, useToggle, useFullscreen } from '@vueuse/core';
   import { useAppStore, useUserStore } from '@/store';
   import { LOCALE_OPTIONS } from '@/locale';
   import useLocale from '@/hooks/locale';
   import useUser from '@/hooks/user';
+  import { redirectHome } from '@/router/utils';
   import MessageBox from '../message-box/index.vue';
 
-  const router = useRouter();
   const appStore = useAppStore();
   const userStore = useUserStore();
   const { logout } = useUser();
@@ -212,10 +211,6 @@
     Message.success(res as string);
   };
   const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void;
-  const toHome = () =>
-    router.push({
-      path: '/',
-    });
 </script>
 
 <style scoped lang="less">
