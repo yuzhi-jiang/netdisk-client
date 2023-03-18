@@ -92,6 +92,7 @@
   import useLoading from '@/hooks/loading';
   import type { LoginData } from '@/api/user';
   import { isEmail } from '@/utils/validate';
+  import { redirectLogin } from '@/router/utils';
 
   const router = useRouter();
   const { t } = useI18n();
@@ -121,30 +122,24 @@
     if (!errors) {
       setLoading(true);
       try {
-        await userStore.login(values as LoginData);
-        const { redirect, ...othersQuery } = router.currentRoute.value.query;
-        router.push({
-          name: (redirect as string) || 'filelist',
-          query: {
-            ...othersQuery,
-          },
-        });
-        Message.success('注册成功');
-        const { rememberPassword } = loginConfig.value;
-        const { username, password } = values;
-        // 实际生产环境需要进行加密存储。
-        // The actual production environment requires encrypted storage.
-        loginConfig.value.username = rememberPassword ? username : '';
-        loginConfig.value.password = rememberPassword ? password : '';
+        Message.info('开始注册');
+        await userStore.register(values as LoginData);
+        redirectLogin();
+        Message.success('注册成功，请前往邮箱激活用户！');
+        // const { rememberPassword } = loginConfig.value;
+        // const { username, password } = values;
+        // // 实际生产环境需要进行加密存储。
+        // // The actual production environment requires encrypted storage.
+        // loginConfig.value.username = rememberPassword ? username : '';
+        // loginConfig.value.password = rememberPassword ? password : '';
       } catch (err) {
+        console.log(err);
         errorMessage.value = (err as Error).message;
       } finally {
         setLoading(false);
       }
     }
   };
-
-  document.title = 'Netdisk 注册页';
 </script>
 
 <style lang="less" scoped>
