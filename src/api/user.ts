@@ -78,11 +78,9 @@ export function logout() {
  * @param userid 注册、登陆时获取的user_id
  * @returns { UserState } user_info
  */
-export function getUserBaseInfo(userid: UserState['userId'] = '') {
+export function getUserBaseInfo(userId: UserState['userId'] = '') {
   return axios.get<UserState>(`${baseURL}/user/userinfo`, {
-    headers: {
-      user_id: userid,
-    },
+    headers: { userId },
   });
 }
 
@@ -90,11 +88,9 @@ export function getUserBaseInfo(userid: UserState['userId'] = '') {
  * @param {UserState['user_id']} userid 注册、登录时获取的user_id
  * @returns {UserState} user_info_all
  */
-export function getUserInfo(userid: UserState['userId'] = '') {
+export function getUserInfo(userId: UserState['userId'] = '') {
   return axios.get<UserInfoRecord>(`${baseURL}/user/userdisk`, {
-    headers: {
-      user_id: userid,
-    },
+    headers: { userId },
   });
 }
 
