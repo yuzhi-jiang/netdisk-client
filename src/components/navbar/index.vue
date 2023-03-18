@@ -17,7 +17,7 @@
       </a-space>
     </div>
     <ul class="right-side">
-      <li>
+      <!-- <li>
         <a-tooltip :content="$t('settings.language')">
           <a-button
             class="nav-btn"
@@ -42,7 +42,7 @@
             </a-doption>
           </template>
         </a-dropdown>
-      </li>
+      </li> -->
       <li>
         <a-tooltip
           :content="
@@ -112,20 +112,6 @@
           </a-button>
         </a-tooltip>
       </li>
-      <!-- <li>
-        <a-tooltip :content="$t('settings.title')">
-          <a-button
-            class="nav-btn"
-            type="outline"
-            :shape="'circle'"
-            @click="setVisible"
-          >
-            <template #icon>
-              <icon-settings />
-            </template>
-          </a-button>
-        </a-tooltip>
-      </li> -->
       <li>
         <a-dropdown trigger="click">
           <a-avatar
@@ -177,7 +163,7 @@
   const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
   const locales = [...LOCALE_OPTIONS];
   const avatar = computed(() => {
-    return userStore.avatar;
+    return userStore.userVo?.imgPath || '/images/favicon32.png';
   });
   const theme = computed(() => {
     return appStore.theme;
