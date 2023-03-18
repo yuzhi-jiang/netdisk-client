@@ -13,7 +13,6 @@ export default function setupUserLoginInfoGuard(router: Router) {
     const userStore = useUserStore();
 
     // 不进入login，而是指定定向到指定页面
-
     console.log('beforeEach', to);
     if (to.name === 'register') {
       next();
@@ -22,13 +21,12 @@ export default function setupUserLoginInfoGuard(router: Router) {
 
     if (isLogin()) {
       // isLogin, use token
-
       if (userStore.role) {
         next();
       } else {
         try {
           // get user info
-          // 登录成功后便返回信息
+          // 注册、登录成功后便获取信息，通过user_id
           await userStore.info();
           next();
         } catch (error) {
