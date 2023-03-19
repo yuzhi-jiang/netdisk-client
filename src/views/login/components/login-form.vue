@@ -237,13 +237,7 @@
 
     try {
       await userStore.login(values as LoginData);
-      const { redirect, ...othersQuery } = router.currentRoute.value.query;
-      router.push({
-        name: (redirect as string) || 'filelist',
-        query: {
-          ...othersQuery,
-        },
-      });
+      redirectHomeOrDefault();
       Message.success(t('login.form.login.success'));
 
       if (loginType === 'account') remember();
@@ -291,9 +285,9 @@
     const handleOpenWindow = async (e: MessageEvent) => {
       const data = JSON.parse(e.data);
       // {"username":"azin-cn","mobile":"","imgPath":"https://avatars.githubusercontent.com/u/97966585?v=4","token":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOjM5LCJjcmVhdGVkIjoxNjc5MDYxMTk0NjM0LCJleHAiOjE2Nzk2NjU5OTQsInVzZXJuYW1lIjoiYXppbi1jbiJ9.rLLO-P-tMILrUauxfE9QAnxhhFasJMo6HYomiaXRFAk"}
-      // const { username, mobile, imgPath, token } = data;
+      // const { username, mobile, imgPath, token, userId } = data;
       console.log(data);
-      await userStore.setInfo({ ...data, role: '*' });
+      await userStore.thirdLogin({ ...data, role: '*' });
       window.removeEventListener('message', handleOpenWindow);
       // 跳转路由
       redirectHomeOrDefault();

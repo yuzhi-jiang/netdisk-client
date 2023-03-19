@@ -5,7 +5,9 @@ import {
   logout as userLogout,
   getUserInfo,
   LoginData,
+  // type LoginRes,
 } from '@/api/user';
+import type { LoginRes } from '@/api/user';
 import { setToken, clearToken, getUserID, setUserID } from '@/utils/auth';
 import { removeRouteListener } from '@/utils/route-listener';
 import { UserState } from './types';
@@ -69,7 +71,6 @@ const useUserStore = defineStore('user', {
       // 首先登录，其次获取info信息，如果刷新，则直接获取localStorage中的user_id
       const userId = getUserID();
       const { data } = await getUserInfo(userId as string);
-      console.log(data);
       this.setInfo(data);
     },
 
@@ -94,6 +95,12 @@ const useUserStore = defineStore('user', {
         clearToken();
         throw err;
       }
+    },
+
+    async thirdLogin(loginRes: LoginRes) {
+      const { token, userId } = loginRes;
+      setToken(token);
+      setUserID(userId);
     },
 
     logoutCallBack() {
