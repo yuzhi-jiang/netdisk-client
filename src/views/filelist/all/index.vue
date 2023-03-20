@@ -39,7 +39,7 @@
     const { key } = action;
     switch (key) {
       case 'create.dir':
-        modalRef.value?.init();
+        modalRef.value?.init(states.reqParams);
         break;
       case 'upload.file':
       case 'upload.dir':
@@ -56,7 +56,7 @@
   };
 
   const request = async (params = {}) => {
-    params = paramsAdapter(params, states);
+    params = paramsAdapter(params as any, states);
     console.log(params);
     const { data } = await getFileList(params);
     if (data?.list) {
@@ -80,8 +80,8 @@
     const { params, query } = $route;
     // appoint a folder, can't find a way to define the route type, like type, parentId
     if (Object.keys(params).length !== 0) {
-      const { type, parentId } = params as ReqParams;
-      states.reqParams = { type, parentId };
+      const { type, parentFileId } = params as ReqParams;
+      states.reqParams = { type, parentFileId };
       // get_path() // 获取fullpath
     }
     if (Object.keys(query).length !== 0) {
@@ -159,9 +159,9 @@
           </a-popover>
         </template>
 
-        <template #name="{ row, record }">
+        <template #fileName="{ row, record }">
           <router-link
-            :to="`/filelist/all/${record.type}/${record.id}`"
+            :to="`/filelist/all/${record.type}/${record.fileId}`"
             class="netdisk-table-tr__name"
           >
             <IconFont
@@ -176,7 +176,7 @@
         </template>
 
         <!-- you can formatSize in formatList -->
-        <template #size="{ row, record }">
+        <template #length="{ row, record }">
           <span v-if="record.type === 'file'" class="netdisk-table-tr__size">
             {{ formatSize(row) }}
           </span>

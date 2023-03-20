@@ -28,7 +28,7 @@ app.use(store);
 app.use(i18n);
 app.use(globalComponents, {
   // use iconfont with symbol
-  iconfont: '//at.alicdn.com/t/c/font_3852442_yi508jd3gvl.js',
+  iconfont: '//at.alicdn.com/t/c/font_3852442_zpt7s5ipy6.js',
 });
 app.use(directive);
 

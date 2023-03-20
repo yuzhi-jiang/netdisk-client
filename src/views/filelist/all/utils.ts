@@ -1,4 +1,5 @@
 import type { NodeRecord, ReqParams, ReqQueries } from '@/api/filelist';
+import { useUserStore } from '@/store';
 
 export const formatList = (list: NodeRecord[]) => {
   // you can use algorithm to swap folder and file
@@ -27,26 +28,43 @@ export const formatSize = (size: number, accuracy = 0) => {
     size /= 1024;
     idx += 1;
   }
-  return `${size.toFixed(accuracy)} ${units[idx]}`;
+  const res = size ? `${size?.toFixed(accuracy)} ${units[idx]}` : '-';
+  return res;
 };
 
 export const paramsAdapter = (
-  tableParams: ReqParams,
-  others: {
+  /**
+   * 表格参数
+   */
+  tableParams: ReqParams & { page: number },
+  /**
+   * 路由参数
+   */
+  routeParams: {
     reqParams: ReqParams;
     reqQueries: ReqQueries;
   }
 ) => {
-  const { pageSize } = tableParams;
+  const userStore = useUserStore();
+  const { pageSize, page } = tableParams;
+  console.log('tableParams ', tableParams);
   // adapter
-  const { reqParams, reqQueries } = others;
+  const { reqParams, reqQueries } = routeParams;
   const search = tableParams.search || reqQueries.search;
+  const parentFileId = reqParams.parentFileId || 'root';
+  const fileId = reqParams.parentFileId || 'root';
+  const diskId = userStore.$state.diskVo?.diskId;
+  const pageNum = page;
+
   const params = {
     ...reqQueries,
     ...reqParams,
     ...tableParams,
-    search,
-    limit: pageSize,
+    search: `name = ${search}`,
+    parentFileId,
+    fileId,
+    diskId,
+    pageNum,
   };
 
   return params;

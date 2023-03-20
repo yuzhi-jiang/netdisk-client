@@ -3,6 +3,7 @@ import setupMock, { successResponseWrap } from '@/utils/setup-mock';
 import type { NodeRecord } from '@/api/filelist';
 
 setupMock({
+  mock: false,
   setup() {
     Mock.mock(new RegExp('/api/filelist'), () => {
       // return failResponseWrap(null, '重新登陆', 50008);
