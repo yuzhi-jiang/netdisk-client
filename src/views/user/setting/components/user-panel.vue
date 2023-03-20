@@ -31,7 +31,7 @@
         :value-style="{
           width: '200px',
           paddingLeft: '8px',
-          textAlign: 'left',
+          textAlign: 'center',
         }"
       >
         <template #label="{ label }">{{ $t(label) }} :</template>
