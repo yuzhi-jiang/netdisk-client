@@ -6,14 +6,21 @@
   import useVisible from '@/hooks/visible';
   import useLoading from '@/hooks/loading';
   import { Callback, FormSubmit } from '@/types/global';
+  import { postFolder } from '@/api/filelist';
 
   const emits = defineEmits(['success']);
 
   interface IForm {
     folder: string;
+    diskId: string;
+    parentFileId: string;
   }
   const { t } = useI18n();
-  const genDefaultForm = (): IForm => ({ folder: '' });
+  const genDefaultForm = (): IForm => ({
+    folder: '',
+    diskId: '',
+    parentFileId: 'root',
+  });
   const { visible, setVisible } = useVisible();
   const { loading, setLoading } = useLoading();
 
@@ -43,8 +50,7 @@
     setLoading(true);
     try {
       //  api
-      // await postNode()
-      // case right case false
+      await postFolder(form.value);
       close();
       emits('success');
       Message.success(t('message.addSuccess'));
@@ -55,6 +61,9 @@
 
   const init = (data?: any) => {
     setVisible(true);
+    const { parentFileId, diskId } = data;
+    form.value.diskId ||= diskId;
+    form.value.parentFileId ||= parentFileId;
   };
 
   defineExpose({ init });
