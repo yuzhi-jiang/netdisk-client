@@ -15,7 +15,7 @@ const FileList: AppRouteRecordRaw = {
   children: [
     {
       name: 'file.all',
-      path: 'all/:type?/:parentId?',
+      path: 'all/:type?/:parentFileId?',
       component: () => import('@/views/filelist/all/index.vue'),
       meta: {
         locale: 'menu.filelist.all',

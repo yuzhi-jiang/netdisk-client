@@ -2,34 +2,39 @@ import axios, { AxiosResponse } from 'axios';
 import type { Pagination, ListResult } from '@/types/global';
 
 export interface FolderRecord {
-  id: string;
-  parent_id: string;
-  name: string;
-  created_at: Date;
-  updated_at: Date;
+  fileId: string;
+  parentFileId: string;
+  fileName: string;
+  length: string;
+  hash: string;
+  status: string;
+  createTime: string;
+  modifyTime: string;
   type: 'file' | 'folder'; // convenience
-  tags?: string[];
+  modifyUser?: string;
 }
 
 export type FileRecord = {
-  file_extension: string;
-  category: string;
-  mime_type: string;
-  url: string;
-  thumbnail: string;
-  size: number;
+  // file_extension: string;
+  // category: string;
+  // mime_type: string;
+  // url: string;
+  // thumbnail: string;
+  // size: number;
   meta: Record<string, any>;
 } & FolderRecord;
 
 export type NodeRecord = Partial<FileRecord>;
 
 export type FileParams = {
-  page: string;
+  fileId: string;
+  parentFileId: string;
+  diskId: string;
   search: string;
   type: 'folder' | 'file';
+  pageNum: number;
+  pageSize: number;
   order: string;
-  fileId: string;
-  parentId: string;
 } & Pagination;
 
 export type ReqQueries = {
@@ -43,18 +48,18 @@ export type ReqParams = Partial<FileParams>;
  * @returns {AxiosResponse<ListResult<NodeRecord>>}
  */
 export function getFileList(params?: ReqParams) {
-  return axios.get<ListResult<NodeRecord>>('/api/filelist', {
-    params,
-  });
+  return axios.get<ListResult<NodeRecord>>('/front/file/list', { params });
 }
 
 /**
  * 创建文件/文件夹
  * @returns {AxiosResponse}
  */
-export function postNode() {
-  return axios.post('/api/filelist', {});
+export function postFolder(params: ReqParams) {
+  return axios.post('/front/file/createWithFolders', { params });
 }
+
+export function postFile() {}
 
 /**
  * 修改文件/文件夹名称

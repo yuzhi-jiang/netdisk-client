@@ -16,7 +16,7 @@ export interface DiskItemRecord {
 
 export interface DiskVO {
   diskItems: DiskItemRecord[];
-  id: string;
+  diskId: string;
   totalCapacity: number;
   useCapacity: number;
   userId: string;

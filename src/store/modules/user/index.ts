@@ -71,6 +71,7 @@ const useUserStore = defineStore('user', {
       // 首先登录，其次获取info信息，如果刷新，则直接获取localStorage中的user_id
       const userId = getUserID();
       const { data } = await getUserInfo(userId as string);
+      console.log(data);
       this.setInfo(data);
     },
 
