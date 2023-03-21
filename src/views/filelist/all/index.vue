@@ -8,8 +8,10 @@
     ReqQueries,
     getFileList,
   } from '@/api/filelist';
+  import { useUserStore } from '@/store';
   import List from '@/components/list/index.vue';
   import { IAction } from '@/components/list/types';
+  import { useCloned } from '@vueuse/core';
   import { formatList, formatSize, paramsAdapter } from './utils';
   import useList from './use-list';
   import useInput from './use-input';
@@ -17,6 +19,7 @@
   import ModalForm from './components/modal-form.vue';
 
   const $route = useRoute();
+  const userStore = useUserStore();
   const { columns, toolbar, actions } = useList();
   const { content, clearInput, okSearch } = useInput();
   const { triggers } = useTrigger();
@@ -37,10 +40,16 @@
     selectedKeys?: number[];
   }) => {
     const { key } = action;
+    // selectedKeys = useCloned(selectedKeys).cloned.value;
     switch (key) {
-      case 'create.dir':
-        modalRef.value?.init(states.reqParams);
+      case 'create.dir': {
+        const val = {
+          ...states.reqParams,
+          diskId: userStore.$state.diskVo?.diskId,
+        };
+        modalRef.value?.init(val);
         break;
+      }
       case 'upload.file':
       case 'upload.dir':
         break;

@@ -11,15 +11,17 @@
   const emits = defineEmits(['success']);
 
   interface IForm {
-    folder: string;
+    fileName: string;
     diskId: string;
     parentFileId: string;
+    type: 'folder';
   }
   const { t } = useI18n();
   const genDefaultForm = (): IForm => ({
-    folder: '',
+    fileName: '',
     diskId: '',
     parentFileId: 'root',
+    type: 'folder',
   });
   const { visible, setVisible } = useVisible();
   const { loading, setLoading } = useLoading();
@@ -27,7 +29,7 @@
   const formRef = ref<InstanceType<typeof Form>>();
   const form = ref<IForm>(genDefaultForm());
   const rules = {
-    folder: [
+    fileName: [
       {
         validator: (value: string, callback: Callback) => {
           if (value && validateFileName(value)) {
@@ -62,8 +64,9 @@
   const init = (data?: any) => {
     setVisible(true);
     const { parentFileId, diskId } = data;
-    form.value.diskId ||= diskId;
-    form.value.parentFileId ||= parentFileId;
+    console.log(data);
+    form.value.diskId = diskId;
+    form.value.parentFileId = parentFileId || form.value.parentFileId;
   };
 
   defineExpose({ init });
@@ -85,7 +88,7 @@
       @submit="onSubmit"
     >
       <a-form-item
-        field="folder"
+        field="fileName"
         :label="$t('filelist.create.form.input.label')"
         validate-trigger="input"
         :rules="{
@@ -94,14 +97,14 @@
         }"
       >
         <a-input
-          v-model="form.folder"
+          v-model="form.fileName"
           :placeholder="$t('filelist.create.form.input.placeholder')"
           allow-clear
         />
       </a-form-item>
       <a-form-item>
         <a-space>
-          <a-button html-type="submit">
+          <a-button html-type="submit" :loading="loading">
             {{ $t('form.actions.submit') }}
           </a-button>
           <a-button @click="close">

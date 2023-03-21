@@ -21,7 +21,8 @@ export const formatList = (list: NodeRecord[]) => {
  * @param {Number} [accuracy=0] 精确到的小数点数
  * @return {String} 1TB
  */
-export const formatSize = (size: number, accuracy = 0) => {
+export const formatSize = (_size: string, accuracy = 0) => {
+  let size = Number(_size);
   const units = ['B', 'KB', 'MB', 'GB', 'TB'];
   let idx = 0;
   while (idx < units.length - 1 && size > 1024) {
@@ -60,7 +61,7 @@ export const paramsAdapter = (
     ...reqQueries,
     ...reqParams,
     ...tableParams,
-    search: `name = ${search}`,
+    search: search ? `name = ${search}` : search,
     parentFileId,
     fileId,
     diskId,
