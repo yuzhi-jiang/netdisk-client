@@ -1,4 +1,5 @@
 import type { NodeRecord, ReqParams, ReqQueries } from '@/api/filelist';
+import { useUserStore } from '@/store';
 
 export const formatList = (list: NodeRecord[]) => {
   // you can use algorithm to swap folder and file
@@ -20,33 +21,43 @@ export const formatList = (list: NodeRecord[]) => {
  * @param {Number} [accuracy=0] 精确到的小数点数
  * @return {String} 1TB
  */
-export const formatSize = (size: number, accuracy = 0) => {
+export const formatSize = (_size: string, accuracy = 0) => {
+  let size = Number(_size);
   const units = ['B', 'KB', 'MB', 'GB', 'TB'];
   let idx = 0;
   while (idx < units.length - 1 && size > 1024) {
     size /= 1024;
     idx += 1;
   }
-  return `${size.toFixed(accuracy)} ${units[idx]}`;
+  const res = size ? `${size?.toFixed(accuracy)} ${units[idx]}` : '-';
+  return res;
 };
 
 export const paramsAdapter = (
-  tableParams: ReqParams,
-  others: {
+  /**
+   * 表格参数
+   */
+  tableParams: ReqParams & { page: number },
+  /**
+   * 路由参数
+   */
+  routeParams: {
     reqParams: ReqParams;
     reqQueries: ReqQueries;
   }
 ) => {
-  const { pageSize } = tableParams;
+  const userStore = useUserStore();
+  const { pageSize, page, order } = tableParams;
+  console.log('tableParams ', tableParams);
   // adapter
-  const { reqParams, reqQueries } = others;
-  const search = tableParams.search || reqQueries.search;
+  const diskId = userStore.$state.diskVo?.diskId;
+  const pageNum = page;
+
   const params = {
-    ...reqQueries,
-    ...reqParams,
-    ...tableParams,
-    search,
-    limit: pageSize,
+    diskId,
+    order,
+    pageNum,
+    pageSize,
   };
 
   return params;

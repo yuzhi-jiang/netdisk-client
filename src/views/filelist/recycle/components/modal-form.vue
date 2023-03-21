@@ -6,6 +6,7 @@
   import useVisible from '@/hooks/visible';
   import useLoading from '@/hooks/loading';
   import type { NodeRecord } from '@/api/filelist';
+  import { deleteNodes, recoverNodes } from '@/api/recycle';
 
   const emits = defineEmits(['success']);
 
@@ -28,9 +29,12 @@
 
   const onConfirm = async (type: 'recover' | 'delete') => {
     setLoading(true);
+    const { fileId, diskId } = raw.value as any;
+    const body = { diskId, fileId };
     try {
-      // network
-      // type === 'recover' ? api1 : api2
+      await (type === 'recover'
+        ? recoverNodes([{ body }])
+        : deleteNodes([{ body }]));
       close();
       emits('success');
       Message.success(t('message.operationSuccess'));
@@ -56,7 +60,7 @@
 <template>
   <a-modal
     v-model:visible="visible"
-    :title="raw?.name"
+    :title="raw?.fileName"
     :footer="false"
     :unmount-on-close="true"
     title-align="start"

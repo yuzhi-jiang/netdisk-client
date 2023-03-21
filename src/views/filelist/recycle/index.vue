@@ -1,13 +1,8 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { useRoute } from 'vue-router';
-  import { IconMore } from '@arco-design/web-vue/es/icon';
-  import {
-    NodeRecord,
-    ReqParams,
-    ReqQueries,
-    getFileList,
-  } from '@/api/filelist';
+  import { NodeRecord, ReqParams, ReqQueries } from '@/api/filelist';
+  import { getFileList, recoverNodes, deleteNodes } from '@/api/recycle';
   import List from '@/components/list/index.vue';
   import { IAction } from '@/components/list/types';
   import { formatList, formatSize, paramsAdapter } from './utils';
@@ -17,6 +12,7 @@
 
   const $route = useRoute();
   const { columns, toolbar, actions } = useList();
+
   const listRef = ref<InstanceType<typeof List>>();
   const modalRef = ref<InstanceType<typeof ModalForm>>();
   const states = {
@@ -34,10 +30,13 @@
     selectedKeys?: number[];
   }) => {
     const { key } = action;
+    console.log(action, record, selectedKeys);
     switch (key) {
       case 'show.info':
         console.log(record);
         modalRef.value?.init(record);
+        break;
+      case 'batch-recover':
         break;
       case 'bulk-delete':
         listRef.value?.reload();
@@ -51,13 +50,13 @@
   };
 
   const request = async (params = {}) => {
-    params = paramsAdapter(params, states);
+    params = paramsAdapter(params as any, states);
     console.log(params);
-    const { data } = await getFileList(params);
-    if (data?.list) {
+    const { data } = await getFileList(params as any);
+    if (data) {
       return {
         // must be format
-        data: formatList(data.list),
+        data: formatList(data),
         total: data.total,
       };
     }
@@ -75,9 +74,8 @@
     const { params, query } = $route;
     // appoint a folder, can't find a way to define the route type, like type, parentId
     if (Object.keys(params).length !== 0) {
-      const { type, parentId } = params as ReqParams;
-      states.reqParams = { type, parentId };
-      // get_path() // 获取fullpath
+      const { type, parentFileId } = params as ReqParams;
+      states.reqParams = { type, parentFileId };
     }
     if (Object.keys(query).length !== 0) {
       const { search } = query as ReqQueries;
@@ -100,7 +98,6 @@
         @action="onAction"
       >
         <!-- acions.key -->
-
         <template #batch-recover="{ action, onAction }: any">
           <ButtonAction
             :action="action"
@@ -130,7 +127,7 @@
           />
         </template>
 
-        <template #name="{ row, record }">
+        <template #fileName="{ row, record }">
           <!-- :to="`/filelist/all/${record.type}/${record.id}`" -->
           <a-typography
             class="netdisk-table-tr__name"
