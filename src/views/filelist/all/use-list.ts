@@ -14,14 +14,6 @@ export default function useList() {
       // defaultSortOrder: 'descend' as const,
       width: 200,
     },
-    // {
-    //   title: 'filelist.tags', // file.tag
-    //   prop: 'tags',
-    //   // sortable: true,
-    //   // defaultSortOrder: 'descend' as const,
-    //   // formatter: (date: string) => d(date, 'long'),
-    //   width: 100,
-    // },
     {
       title: 'filelist.updated_at', // file.updated_at
       prop: 'modifyTime',
@@ -40,12 +32,6 @@ export default function useList() {
       prop: 'type',
       formatter: (row, idx, record: NodeRecord) => {
         return row === 'folder' ? '文件夹' : '文件';
-        // eslint error: camecase
-        // const { file_extension: ext, type } = record;
-        // if (ext) {
-        //   return `${ext} ${t('file')}`;
-        // }
-        // return type === 'folder' ? t('folder') : t('file');
       },
       width: 100,
     },

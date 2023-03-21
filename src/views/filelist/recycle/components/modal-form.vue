@@ -14,6 +14,11 @@
   const { visible, setVisible } = useVisible();
   const { loading, setLoading } = useLoading();
 
+  const loadings = ref({
+    delete: false,
+    recover: false,
+  });
+
   type IOption = {
     label: string;
     value: string;
@@ -28,7 +33,14 @@
   };
 
   const onConfirm = async (type: 'recover' | 'delete') => {
-    setLoading(true);
+    if (type === 'recover') {
+      loadings.value.delete = false;
+      loadings.value.recover = true;
+    } else {
+      loadings.value.delete = true;
+      loadings.value.recover = false;
+    }
+
     const { fileId, diskId } = raw.value as any;
     const body = { diskId, fileId };
     try {
@@ -39,7 +51,10 @@
       emits('success');
       Message.success(t('message.operationSuccess'));
     } finally {
-      setLoading(false);
+      loadings.value = {
+        delete: false,
+        recover: false,
+      };
     }
   };
 
@@ -78,7 +93,8 @@
           >
             <a-button
               size="mini"
-              :loading="loading"
+              :loading="loadings.recover"
+              :disabled="loadings.recover || loadings.delete"
               @click="onConfirm('recover')"
             >
               <template #icon>
@@ -87,7 +103,12 @@
             </a-button>
           </a-tooltip>
           <a-tooltip :content="$t('recycle.button.delete')" position="top" mini>
-            <a-button size="mini" @click="onConfirm('delete')">
+            <a-button
+              size="mini"
+              :loading="loadings.delete"
+              :disabled="loadings.recover || loadings.delete"
+              @click="onConfirm('delete')"
+            >
               <template #icon>
                 <IconDelete size="20" />
               </template>
