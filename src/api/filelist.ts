@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import type { Pagination, ListResult } from '@/types/global';
 
 export interface FolderRecord {
+  diskId: string;
   fileId: string;
   parentFileId: string;
   fileName: string;
@@ -56,7 +57,7 @@ export function getFileList(params?: ReqParams) {
  * @returns {AxiosResponse}
  */
 export function postFolder(params: ReqParams) {
-  return axios.post('/front/file/createWithFolders', { params });
+  return axios.post('/front/file/createWithFolders', params);
 }
 
 export function postFile() {}

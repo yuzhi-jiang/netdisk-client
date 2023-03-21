@@ -4,7 +4,8 @@ import { useCloned } from '@vueuse/core';
 import { UserState, UserInfoRecord } from '@/store/modules/user/types';
 
 // const baseURL = 'http://146.56.116.51:8082/front';
-const baseURL = 'http://192.168.196.80:8082/front';
+// const baseURL = 'http://192.168.196.80:8082/front';
+const baseURL = '/front';
 
 export interface LoginData {
   account?: string;
