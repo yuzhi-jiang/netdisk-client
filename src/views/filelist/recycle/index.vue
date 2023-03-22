@@ -1,8 +1,18 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { useRoute } from 'vue-router';
+  import { useUserStore } from '@/store';
+  import { Message } from '@arco-design/web-vue';
   import { NodeRecord, ReqParams, ReqQueries } from '@/api/filelist';
-  import { getFileList, recoverNodes, deleteNodes } from '@/api/recycle';
+  import {
+    getFileList,
+    recoverNodes,
+    deleteNodes,
+    clearRecycleBox,
+    RequestBody,
+  } from '@/api/recycle';
+  import useVisible from '@/hooks/visible';
+  import useLoading from '@/hooks/loading';
   import List from '@/components/list/index.vue';
   import { IAction } from '@/components/list/types';
   import { formatList, formatSize, paramsAdapter } from './utils';
@@ -11,13 +21,36 @@
   import ButtonAction from './components/button-action.vue';
 
   const $route = useRoute();
+  const userStore = useUserStore();
   const { columns, toolbar, actions } = useList();
+  const { visible, setVisible } = useVisible();
+  const { loading, setLoading } = useLoading();
 
   const listRef = ref<InstanceType<typeof List>>();
   const modalRef = ref<InstanceType<typeof ModalForm>>();
   const states = {
     reqParams: {} as ReqParams, // request params
     reqQueries: {} as ReqQueries, // request queries
+    operation: '',
+    requests: [] as RequestBody[],
+  };
+
+  const handleOperation = async () => {
+    const { operation, requests } = states;
+    const cb = operation === '删除' ? deleteNodes : recoverNodes;
+
+    setLoading(true);
+    try {
+      await cb?.(requests);
+      listRef.value?.reload();
+      Message.success(`${operation}成功`);
+    } finally {
+      setLoading(false);
+      setVisible(false);
+    }
+  };
+  const handleCancel = () => {
+    setVisible(false);
   };
 
   const onAction = async ({
@@ -30,15 +63,33 @@
     selectedKeys?: number[];
   }) => {
     const { key } = action;
-    console.log(action, record, selectedKeys);
+    console.log(selectedKeys);
+    const diskId = userStore.diskVo?.diskId;
+    states.requests = selectedKeys
+      ?.filter((fileId) => !!fileId)
+      .map((fileId) => ({
+        body: {
+          fileId,
+          diskId,
+        },
+      })) as any;
+    console.log(key, states.requests);
     switch (key) {
       case 'show.info':
         console.log(record);
         modalRef.value?.init(record);
         break;
       case 'batch-recover':
+        states.operation = '恢复';
+        setVisible(true);
         break;
-      case 'bulk-delete':
+      case 'batch-delete': {
+        states.operation = '删除';
+        setVisible(true);
+        break;
+      }
+      case 'all-clear':
+        await clearRecycleBox(diskId as string);
         listRef.value?.reload();
         break;
       default:
@@ -53,10 +104,10 @@
     params = paramsAdapter(params as any, states);
     console.log(params);
     const { data } = await getFileList(params as any);
-    if (data) {
+    if (data?.list) {
       return {
         // must be format
-        data: formatList(data),
+        data: formatList(data.list),
         total: data.total,
       };
     }
@@ -83,6 +134,8 @@
     }
   };
   init();
+
+  document.title = 'Netdisk 回收站';
 </script>
 
 <template>
@@ -95,6 +148,7 @@
         :columns="columns"
         :actions="[]"
         :request="request"
+        row-key="fileId"
         @action="onAction"
       >
         <!-- acions.key -->
@@ -157,6 +211,16 @@
         </template>
       </List>
     </a-space>
+    <a-modal
+      :visible="visible"
+      :ok-loading="loading"
+      :closable="!loading"
+      @ok="handleOperation"
+      @cancel="handleCancel"
+    >
+      <template #title> 提示 </template>
+      <div> 是否确认{{ states.operation }} </div>
+    </a-modal>
     <ModalForm ref="modalRef" @success="onSuccess" />
   </div>
 </template>
