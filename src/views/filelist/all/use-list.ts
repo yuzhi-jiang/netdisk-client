@@ -65,8 +65,8 @@ export default function useList() {
       icon: IconDelete,
       type: 'text' as const,
       bulk: true,
-      confirm: true,
-      confirmText: 'list.actions.confirm.bulk-delete',
+      // confirm: true,
+      // confirmText: 'list.actions.confirm.bulk-delete',
     },
   ];
 

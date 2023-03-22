@@ -8,10 +8,13 @@
     ReqQueries,
     getFileList,
   } from '@/api/filelist';
+  import { addNodes } from '@/api/recycle';
   import { useUserStore } from '@/store';
   import List from '@/components/list/index.vue';
   import { IAction } from '@/components/list/types';
-  import { useCloned } from '@vueuse/core';
+  import useLoading from '@/hooks/loading';
+  import useVisible from '@/hooks/visible';
+  import { Message } from '@arco-design/web-vue';
   import { formatList, formatSize, paramsAdapter } from './utils';
   import useList from './use-list';
   import useInput from './use-input';
@@ -20,6 +23,8 @@
 
   const $route = useRoute();
   const userStore = useUserStore();
+  const { loading, setLoading } = useLoading();
+  const { visible, setVisible } = useVisible();
   const { columns, toolbar, actions } = useList();
   const { content, clearInput, okSearch } = useInput();
   const { triggers } = useTrigger();
@@ -28,6 +33,24 @@
   const states = {
     reqParams: {} as ReqParams, // request params
     reqQueries: {} as ReqQueries, // request queries
+    requests: [] as any,
+  };
+
+  const handleOperation = async () => {
+    setLoading(true);
+    try {
+      await addNodes(states.requests);
+      listRef.value?.reload();
+      Message.success('删除成功');
+    } finally {
+      setLoading(false);
+      setVisible(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setLoading(false);
+    setVisible(false);
   };
 
   const onAction = async ({
@@ -40,7 +63,15 @@
     selectedKeys?: number[];
   }) => {
     const { key } = action;
-    // selectedKeys = useCloned(selectedKeys).cloned.value;
+    const diskId = userStore.diskVo?.diskId;
+    states.requests = selectedKeys
+      ?.filter((fileId) => !!fileId)
+      .map((fileId) => ({
+        body: {
+          fileId,
+          diskId,
+        },
+      }));
     switch (key) {
       case 'create.dir': {
         const val = {
@@ -54,7 +85,7 @@
       case 'upload.dir':
         break;
       case 'bulk-delete':
-        listRef.value?.reload();
+        setVisible(true);
         break;
       default:
     }
@@ -99,6 +130,8 @@
     }
   };
   init();
+
+  document.title = 'Netdisk 首页';
 </script>
 
 <template>
@@ -111,6 +144,7 @@
         :columns="columns"
         :actions="[]"
         :request="request"
+        row-key="fileId"
         @action="onAction"
       >
         <template #search="{ action }: any">
@@ -192,6 +226,16 @@
         </template>
       </List>
     </a-space>
+    <a-modal
+      :visible="visible"
+      :ok-loading="loading"
+      :closable="!loading"
+      @ok="handleOperation"
+      @cancel="handleCancel"
+    >
+      <template #title> 提示 </template>
+      <div> 是否确认删除 </div>
+    </a-modal>
     <ModalForm ref="modalRef" @success="onSuccess" />
   </div>
 </template>
