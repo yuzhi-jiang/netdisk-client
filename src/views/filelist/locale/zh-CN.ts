@@ -1,4 +1,5 @@
 import localeRecycle from '../recycle/locale/zh-CN';
+import localeShare from '../shares/locale/zh-CN';
 
 export default {
   'filelist.name': '名称',
@@ -30,4 +31,5 @@ export default {
 
   // recycle
   ...localeRecycle,
+  ...localeShare,
 };

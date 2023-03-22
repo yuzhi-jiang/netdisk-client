@@ -1,11 +1,15 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
-  import { Form, Message } from '@arco-design/web-vue';
+  import { Message } from '@arco-design/web-vue';
   import { IconDelete } from '@arco-design/web-vue/es/icon';
   import useVisible from '@/hooks/visible';
   import useLoading from '@/hooks/loading';
-  import type { NodeRecord } from '@/api/filelist';
+  import {
+    DeleteNodeRecord,
+    ShareNodeRecord,
+    deleteShareNodes,
+  } from '@/api/shares';
 
   const emits = defineEmits(['success']);
 
@@ -18,7 +22,8 @@
     value: string;
   };
   const options = ref<IOption[]>();
-  const raw = ref<NodeRecord>();
+  const raw = ref<ShareNodeRecord>();
+  const deleteNodes = ref<DeleteNodeRecord>();
 
   const close = () => {
     setVisible(false);
@@ -26,11 +31,10 @@
     raw.value = undefined;
   };
 
-  const onConfirm = async (type: 'recover' | 'delete') => {
+  const onConfirm = async (type: 'delete') => {
     setLoading(true);
     try {
-      // network
-      // type === 'recover' ? api1 : api2
+      await deleteShareNodes(deleteNodes.value as DeleteNodeRecord);
       close();
       emits('success');
       Message.success(t('message.operationSuccess'));
@@ -39,8 +43,12 @@
     }
   };
 
-  const init = (data: any) => {
+  const init = (data: ShareNodeRecord | any) => {
     raw.value = data;
+    deleteNodes.value = {
+      diskId: data.diskId,
+      shareIds: [data.shareId],
+    };
     setVisible(true);
     setLoading(true);
     options.value = Object.keys(data).map<IOption>((key) => {
@@ -56,7 +64,7 @@
 <template>
   <a-modal
     v-model:visible="visible"
-    :title="raw?.fileName"
+    :title="raw?.shareTitle"
     :footer="false"
     :unmount-on-close="true"
     title-align="start"
@@ -67,23 +75,12 @@
       </template>
       <template #extra>
         <a-space>
-          <a-tooltip
-            :content="$t('recycle.button.recover')"
-            position="top"
-            mini
-          >
+          <a-tooltip :content="$t('recycle.button.delete')" position="top" mini>
             <a-button
               size="mini"
               :loading="loading"
-              @click="onConfirm('recover')"
+              @click="onConfirm('delete')"
             >
-              <template #icon>
-                <IconFont type="icon-huifu2" size="16"></IconFont>
-              </template>
-            </a-button>
-          </a-tooltip>
-          <a-tooltip :content="$t('recycle.button.delete')" position="top" mini>
-            <a-button size="mini" @click="onConfirm('delete')">
               <template #icon>
                 <IconDelete size="20" />
               </template>
