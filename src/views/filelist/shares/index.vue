@@ -1,15 +1,18 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { useRoute } from 'vue-router';
-  import { IconMore } from '@arco-design/web-vue/es/icon';
+  import { ReqParams, ReqQueries } from '@/api/filelist';
   import {
-    NodeRecord,
-    ReqParams,
-    ReqQueries,
-    getFileList,
-  } from '@/api/filelist';
+    DeleteNodeRecord,
+    ShareNodeRecord,
+    getShareList,
+    deleteShareNodes,
+  } from '@/api/shares';
+  import { useUserStore } from '@/store';
   import List from '@/components/list/index.vue';
   import { IAction } from '@/components/list/types';
+  import useVisible from '@/hooks/visible';
+  import useLoading from '@/hooks/loading';
   import { formatList, formatSize, paramsAdapter } from './utils';
   import useList from './use-list';
   import ModalForm from './components/modal-form.vue';
@@ -17,11 +20,31 @@
 
   const $route = useRoute();
   const { columns, toolbar, actions } = useList();
+  const userStore = useUserStore();
+  const { loading, setLoading } = useLoading();
+  const { visible, setVisible } = useVisible();
   const listRef = ref<InstanceType<typeof List>>();
   const modalRef = ref<InstanceType<typeof ModalForm>>();
   const states = {
     reqParams: {} as ReqParams, // request params
     reqQueries: {} as ReqQueries, // request queries
+    deleteNodes: {} as DeleteNodeRecord,
+  };
+
+  const handleBatchDelete = async () => {
+    setLoading(true);
+    try {
+      await deleteShareNodes(states.deleteNodes);
+      listRef.value?.reload();
+    } finally {
+      setLoading(false);
+      setVisible(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setLoading(false);
+    setVisible(false);
   };
 
   const onAction = async ({
@@ -30,17 +53,20 @@
     selectedKeys,
   }: {
     action: IAction;
-    record?: NodeRecord;
-    selectedKeys?: number[];
+    record?: ShareNodeRecord;
+    selectedKeys?: string[];
   }) => {
     const { key } = action;
+    const diskId = userStore.$state.diskVo?.diskId as string;
+    const shareIds = selectedKeys?.filter((shareId) => !!shareId) as string[];
     switch (key) {
       case 'show.info':
         console.log(record);
         modalRef.value?.init(record);
         break;
-      case 'bulk-delete':
-        listRef.value?.reload();
+      case 'batch-delete':
+        setVisible(true);
+        states.deleteNodes = { diskId, shareIds };
         break;
       default:
     }
@@ -51,9 +77,9 @@
   };
 
   const request = async (params = {}) => {
-    params = paramsAdapter(params, states);
+    params = paramsAdapter(params as any, states);
     console.log(params);
-    const { data } = await getFileList(params);
+    const { data } = await getShareList(params);
     if (data?.list) {
       return {
         // must be format
@@ -97,6 +123,7 @@
         :columns="columns"
         :actions="[]"
         :request="request"
+        row-key="shareId"
         @action="onAction"
       >
         <!-- acions.key -->
@@ -120,7 +147,7 @@
           />
         </template>
 
-        <template #name="{ row, record }">
+        <template #shareTitle="{ row, record }">
           <!-- :to="`/filelist/all/${record.type}/${record.id}`" -->
           <a-typography
             class="netdisk-table-tr__name"
@@ -150,6 +177,16 @@
         </template>
       </List>
     </a-space>
+    <a-modal
+      :visible="visible"
+      :ok-loading="loading"
+      :closable="!loading"
+      @ok="handleBatchDelete"
+      @cancel="handleCancel"
+    >
+      <template #title> 提示 </template>
+      <div> 是否确认删除 </div>
+    </a-modal>
     <ModalForm ref="modalRef" @success="onSuccess" />
   </div>
 </template>

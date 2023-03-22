@@ -1,4 +1,5 @@
 import type { NodeRecord, ReqParams, ReqQueries } from '@/api/filelist';
+import { useUserStore } from '@/store';
 
 export const formatList = (list: NodeRecord[]) => {
   // you can use algorithm to swap folder and file
@@ -31,22 +32,22 @@ export const formatSize = (size: number, accuracy = 0) => {
 };
 
 export const paramsAdapter = (
-  tableParams: ReqParams,
-  others: {
+  tableParams: ReqParams & { page: number },
+  routeParams: {
     reqParams: ReqParams;
     reqQueries: ReqQueries;
   }
 ) => {
-  const { pageSize } = tableParams;
+  const userStore = useUserStore();
+  const { pageSize, page } = tableParams;
   // adapter
-  const { reqParams, reqQueries } = others;
-  const search = tableParams.search || reqQueries.search;
+  const { reqParams, reqQueries } = routeParams;
+  const diskId = userStore.$state.diskVo?.diskId;
+
   const params = {
-    ...reqQueries,
-    ...reqParams,
-    ...tableParams,
-    search,
-    limit: pageSize,
+    diskId,
+    pageNum: page,
+    pageSize,
   };
 
   return params;

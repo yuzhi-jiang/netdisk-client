@@ -1,5 +1,5 @@
 export default {
-  'recycle.button.recover': '恢复',
-  'recycle.button.delete': '删除',
-  'recycle.button.clear': '清空',
+  'sharelist.expiredTime': '过期时间',
+  'sharelist.sharePwd': '提取码',
+  'sharelist.isValid': '状态',
 };

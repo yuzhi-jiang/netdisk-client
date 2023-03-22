@@ -1,7 +1,9 @@
 import { useI18n } from 'vue-i18n';
+import dayjs from 'dayjs';
 import { IconPlus, IconDelete } from '@arco-design/web-vue/es/icon';
 import type { IColumn } from '@/components/list/types';
-import type { NodeRecord } from '@/api/filelist';
+import type { ShareNodeRecord } from '@/api/shares';
+import { getDiffTime } from '@/utils/time';
 
 export default function useList() {
   const { t, d } = useI18n();
@@ -9,16 +11,15 @@ export default function useList() {
   const columns: IColumn[] = [
     {
       title: 'filelist.name', // file.name
-      prop: 'fileName',
+      prop: 'shareTitle',
       sortable: true,
       // defaultSortOrder: 'descend' as const,
       width: 200,
     },
     {
-      title: 'filelist.updated_at', // file.updated_at
-      prop: 'modifyTime',
+      title: 'sharelist.expiredTime', // file.updated_at
+      prop: 'expiredTime',
       sortable: true,
-      // defaultSortOrder: 'descend' as const,
       formatter: (date: string) => {
         if (date) {
           return d(date, 'long');
@@ -28,24 +29,31 @@ export default function useList() {
       width: 200,
     },
     {
-      title: 'filelist.type', // file.type
-      prop: 'type',
-      formatter: (row, idx, record: NodeRecord) => {
-        return row === 'folder' ? '文件夹' : '文件';
+      title: 'sharelist.sharePwd',
+      prop: 'sharePwd',
+      formatter: (row, idx, record: ShareNodeRecord) => {
+        return row;
       },
       width: 100,
     },
     {
-      title: 'filelist.size', // file.size
-      prop: 'length',
+      title: 'sharelist.isValid',
+      prop: 'isValid',
       sortable: true,
-      formatter: (row, rowIndex, record: NodeRecord) => {
-        if (record.type === 'folder') {
-          return '';
-        }
-        return row;
+      formatter: (row, rowIndex, record: ShareNodeRecord) => {
+        const { expiredTime: expired } = record;
+        // 如果为空则为永久有效
+        if (!expired) return '永久有效';
+
+        // yyyy-MM-dd HH:mm:ss
+        const currTime = new Date().getTime();
+        const expiredTime = new Date(expired).getTime();
+        if (currTime - expiredTime <= 0) return '已过期';
+
+        // 天 时 分
+        return getDiffTime(new Date(currTime), new Date(expiredTime));
       },
-      width: 70,
+      width: 100,
     },
   ];
 
@@ -55,8 +63,8 @@ export default function useList() {
       icon: IconDelete,
       type: 'text' as const,
       bulk: true,
-      confirm: true,
-      confirmText: 'list.actions.confirm.batch-delete',
+      // confirm: true,
+      // confirmText: 'list.actions.confirm.batch-delete',
     },
     {
       key: 'all-clear',
