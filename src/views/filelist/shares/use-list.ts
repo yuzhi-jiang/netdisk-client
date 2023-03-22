@@ -9,43 +9,35 @@ export default function useList() {
   const columns: IColumn[] = [
     {
       title: 'filelist.name', // file.name
-      prop: 'name',
+      prop: 'fileName',
       sortable: true,
       // defaultSortOrder: 'descend' as const,
       width: 200,
     },
     {
-      title: 'filelist.tags', // file.tag
-      prop: 'tags',
-      // sortable: true,
-      // defaultSortOrder: 'descend' as const,
-      // formatter: (date: string) => d(date, 'long'),
-      width: 100,
-    },
-    {
       title: 'filelist.updated_at', // file.updated_at
-      prop: 'updated_at',
+      prop: 'modifyTime',
       sortable: true,
       // defaultSortOrder: 'descend' as const,
-      formatter: (date: string) => d(date, 'long'),
+      formatter: (date: string) => {
+        if (date) {
+          return d(date, 'long');
+        }
+        return '-';
+      },
       width: 200,
     },
     {
       title: 'filelist.type', // file.type
       prop: 'type',
       formatter: (row, idx, record: NodeRecord) => {
-        // eslint error: camecase
-        const { file_extension: ext, type } = record;
-        if (ext) {
-          return `${ext} ${t('file')}`;
-        }
-        return type === 'folder' ? t('folder') : t('file');
+        return row === 'folder' ? '文件夹' : '文件';
       },
       width: 100,
     },
     {
       title: 'filelist.size', // file.size
-      prop: 'size',
+      prop: 'length',
       sortable: true,
       formatter: (row, rowIndex, record: NodeRecord) => {
         if (record.type === 'folder') {

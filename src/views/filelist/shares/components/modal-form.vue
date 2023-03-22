@@ -56,7 +56,7 @@
 <template>
   <a-modal
     v-model:visible="visible"
-    :title="raw?.name"
+    :title="raw?.fileName"
     :footer="false"
     :unmount-on-close="true"
     title-align="start"

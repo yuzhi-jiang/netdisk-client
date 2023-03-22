@@ -75,8 +75,8 @@
     const { params, query } = $route;
     // appoint a folder, can't find a way to define the route type, like type, parentId
     if (Object.keys(params).length !== 0) {
-      const { type, parentId } = params as ReqParams;
-      states.reqParams = { type, parentId };
+      const { type, parentFileId } = params as ReqParams;
+      states.reqParams = { type, parentFileId };
       // get_path() // 获取fullpath
     }
     if (Object.keys(query).length !== 0) {
