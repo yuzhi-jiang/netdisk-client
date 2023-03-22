@@ -13,15 +13,27 @@ export function getFileList(params: FileListParams) {
   });
 }
 
-interface RequestBody {
+export interface RequestBody {
   body: {
     diskId: string;
     fileId: string;
   };
 }
 
-interface RequestParams {
+export interface RequestParams {
   requests: Request[];
+}
+
+/**
+ * 往回收站添加文件，即主页面删除文件
+ * @param params
+ * @returns
+ */
+export function addNodes(params?: RequestBody[]) {
+  return axios.post('/front/file/recycle/add', {
+    diskId: params?.[0].body.diskId,
+    requests: params,
+  });
 }
 
 /**
@@ -31,6 +43,7 @@ interface RequestParams {
  */
 export function deleteNodes(params: RequestBody[]) {
   return axios.post('/front/file/recycle/delete', {
+    diskId: params?.[0].body.diskId,
     requests: params,
   });
 }
@@ -42,6 +55,7 @@ export function deleteNodes(params: RequestBody[]) {
  */
 export function recoverNodes(params: RequestBody[]) {
   return axios.post('/front/file/recycle/restore', {
+    diskId: params?.[0].body.diskId,
     requests: params,
   });
 }
