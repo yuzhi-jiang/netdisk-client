@@ -10,7 +10,6 @@ declare module '@vue/runtime-core' {
     AAffix: typeof import('@arco-design/web-vue')['Affix'];
     AAlert: typeof import('@arco-design/web-vue')['Alert'];
     AAvatar: typeof import('@arco-design/web-vue')['Avatar'];
-    AAvatarGroup: typeof import('@arco-design/web-vue')['AvatarGroup'];
     ABadge: typeof import('@arco-design/web-vue')['Badge'];
     ABreadcrumb: typeof import('@arco-design/web-vue')['Breadcrumb'];
     ABreadcrumbItem: typeof import('@arco-design/web-vue')['BreadcrumbItem'];
@@ -19,7 +18,6 @@ declare module '@vue/runtime-core' {
     ACard: typeof import('@arco-design/web-vue')['Card'];
     ACarousel: typeof import('@arco-design/web-vue')['Carousel'];
     ACarouselItem: typeof import('@arco-design/web-vue')['CarouselItem'];
-    ACascader: typeof import('@arco-design/web-vue')['Cascader'];
     ACheckbox: typeof import('@arco-design/web-vue')['Checkbox'];
     ACheckboxGroup: typeof import('@arco-design/web-vue')['CheckboxGroup'];
     ACol: typeof import('@arco-design/web-vue')['Col'];
@@ -48,17 +46,14 @@ declare module '@vue/runtime-core' {
     AListItemMeta: typeof import('@arco-design/web-vue')['ListItemMeta'];
     AMenu: typeof import('@arco-design/web-vue')['Menu'];
     AMenuItem: typeof import('@arco-design/web-vue')['MenuItem'];
+    AModal: typeof import('@arco-design/web-vue')['Modal'];
     AOption: typeof import('@arco-design/web-vue')['Option'];
     APopover: typeof import('@arco-design/web-vue')['Popover'];
     ARadio: typeof import('@arco-design/web-vue')['Radio'];
     ARadioGroup: typeof import('@arco-design/web-vue')['RadioGroup'];
-    ARangePicker: typeof import('@arco-design/web-vue')['RangePicker'];
     AResult: typeof import('@arco-design/web-vue')['Result'];
     ARow: typeof import('@arco-design/web-vue')['Row'];
     ASelect: typeof import('@arco-design/web-vue')['Select'];
-    ASkeleton: typeof import('@arco-design/web-vue')['Skeleton'];
-    ASkeletonLine: typeof import('@arco-design/web-vue')['SkeletonLine'];
-    ASkeletonShape: typeof import('@arco-design/web-vue')['SkeletonShape'];
     ASpace: typeof import('@arco-design/web-vue')['Space'];
     ASpin: typeof import('@arco-design/web-vue')['Spin'];
     AStatistic: typeof import('@arco-design/web-vue')['Statistic'];
@@ -72,6 +67,7 @@ declare module '@vue/runtime-core' {
     ATextarea: typeof import('@arco-design/web-vue')['Textarea'];
     ATooltip: typeof import('@arco-design/web-vue')['Tooltip'];
     ATrigger: typeof import('@arco-design/web-vue')['Trigger'];
+    ATypography: typeof import('@arco-design/web-vue')['Typography'];
     ATypographyParagraph: typeof import('@arco-design/web-vue')['TypographyParagraph'];
     ATypographyText: typeof import('@arco-design/web-vue')['TypographyText'];
     ATypographyTitle: typeof import('@arco-design/web-vue')['TypographyTitle'];
