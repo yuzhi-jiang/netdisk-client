@@ -10,6 +10,7 @@ export interface ShareNodeRecord {
   shareId: string;
   sharePwd: string;
   shareTitle: string;
+  shareUrl: string;
   type: 'folder' | 'file';
 }
 
@@ -33,7 +34,7 @@ export interface IPostShareNode {
 }
 
 export function postShareNode(params: IPostShareNode) {
-  return axios.post('/front/share/create', params);
+  return axios.post<ShareNodeRecord>('/front/share/create', params);
 }
 
 export interface DeleteNodeRecord {

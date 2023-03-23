@@ -30,16 +30,27 @@
       sharePwd: false,
       expiredTime: false,
     },
+    share: {
+      show: false,
+      shareTitle: '' as string,
+      copylink: '' as string,
+    },
   });
 
   const close = () => {
     setVisible(false);
     formRef.value?.resetFields();
-    states.value = {
-      disables: {
-        sharePwd: false,
-        expiredTime: false,
-      },
+    states.value.disables = {
+      sharePwd: false,
+      expiredTime: false,
+    };
+  };
+
+  const copyClose = () => {
+    states.value.share = {
+      show: false,
+      shareTitle: '',
+      copylink: '',
     };
   };
 
@@ -50,7 +61,14 @@
     try {
       //  api
       console.log(form.value);
-      await postShareNode(form.value);
+      const {
+        data: { shareUrl, shareTitle },
+      } = await postShareNode(form.value);
+      states.value.share = {
+        shareTitle,
+        copylink: shareUrl,
+        show: true,
+      };
       emits('success');
       close();
       Message.success('创建分享成功');
@@ -144,5 +162,21 @@
         </a-space>
       </a-form-item>
     </a-form>
+  </a-modal>
+
+  <a-modal
+    v-model:visible="states.share.show"
+    :title="states.share.shareTitle"
+    title-align="start"
+    :footer="false"
+    :unmount-on-close="true"
+    esc-to-close
+    @close="copyClose"
+  >
+    <a-typography>
+      <a-typography-paragraph copyable>
+        {{ states.share.copylink }}
+      </a-typography-paragraph>
+    </a-typography>
   </a-modal>
 </template>
