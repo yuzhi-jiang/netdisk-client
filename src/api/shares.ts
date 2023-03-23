@@ -62,5 +62,9 @@ export function deleteShareNodes(params: DeleteNodeRecord) {
  * @returns
  */
 export function clearShareBox(diskId: string) {
-  return axios.post(`/front/share/clear/${diskId}`);
+  return axios.delete(`/front/share/clear`, {
+    params: {
+      diskId,
+    },
+  });
 }

@@ -7,6 +7,7 @@
     ShareNodeRecord,
     getShareList,
     deleteShareNodes,
+    clearShareBox,
   } from '@/api/shares';
   import { useUserStore } from '@/store';
   import List from '@/components/list/index.vue';
@@ -67,6 +68,10 @@
       case 'batch-delete':
         setVisible(true);
         states.deleteNodes = { diskId, shareIds };
+        break;
+      case 'all-clear':
+        await clearShareBox(diskId);
+        listRef.value?.reload();
         break;
       default:
     }
