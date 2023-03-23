@@ -61,6 +61,11 @@
     setVisible(false);
   };
 
+  const getNodeLink = (record: NodeRecord): string => {
+    if (record.type === 'file') return '';
+    return `/filelist/all/${record.type}/${record.fileId}`;
+  };
+
   const onAction = async ({
     action,
     record,
@@ -257,10 +262,7 @@
         </template>
 
         <template #fileName="{ row, record }">
-          <router-link
-            :to="`/filelist/all/${record.type}/${record.fileId}`"
-            class="netdisk-table-tr__name"
-          >
+          <router-link :to="getNodeLink(record)" class="netdisk-table-tr__name">
             <IconFont
               :type="
                 record.type === 'folder' ? 'icon-wenjianjia2' : 'icon-file2'
