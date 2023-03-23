@@ -7,6 +7,7 @@
     ReqParams,
     ReqQueries,
     getFileList,
+    moveNodes,
   } from '@/api/filelist';
   import { addNodes } from '@/api/recycle';
   import { useUserStore } from '@/store';
@@ -22,6 +23,7 @@
   import useTrigger from './use-trigger';
   import ModalForm from './components/modal-form.vue';
   import ShareForm from './components/share-form.vue';
+  import MoveForm from '../components/move-form.vue';
   import ButtonAction from './components/button-action.vue';
 
   const $route = useRoute();
@@ -34,6 +36,7 @@
   const listRef = ref<InstanceType<typeof List>>();
   const modalRef = ref<InstanceType<typeof ModalForm>>();
   const shareRef = ref<InstanceType<typeof ShareForm>>();
+  const moveRef = ref<InstanceType<typeof MoveForm>>();
   const states = {
     reqParams: {} as ReqParams, // request params
     reqQueries: {} as ReqQueries, // request queries
@@ -101,6 +104,11 @@
         );
         break;
       case 'create-move':
+        moveRef.value?.init({
+          diskId,
+          selectedKeys,
+          moveableFileDiskId: diskId,
+        } as any);
         break;
       default:
     }
@@ -284,6 +292,11 @@
     </a-modal>
     <ShareForm ref="shareRef" @success="onSuccess"></ShareForm>
     <ModalForm ref="modalRef" @success="onSuccess" />
+    <MoveForm
+      ref="moveRef"
+      :request="moveNodes"
+      @success="onSuccess"
+    ></MoveForm>
   </div>
 </template>
 
