@@ -24,15 +24,15 @@ export function getShareList(params = {}) {
   });
 }
 
-export interface PostShareNode {
+export interface IPostShareNode {
   diskId: string;
-  expiration: string;
+  expiredTime: string;
   fileIdList: string[];
   sharePwd: string;
   type: 0 | 1 | 2 | 3; // 分享文件的类型 1，文件，2，文件夹，3.txt,4.doc,5.other
 }
 
-export function postShareNode(params: PostShareNode) {
+export function postShareNode(params: IPostShareNode) {
   return axios.post('/front/share/create', params);
 }
 
