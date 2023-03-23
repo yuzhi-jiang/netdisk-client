@@ -87,3 +87,24 @@ export function deleteNode(id: string) {
 export function deleteNodes(ids: string[] = []) {
   return axios.delete('/api/filelist', { data: { ids } });
 }
+
+export interface IForm {
+  diskId: string;
+  requests: Array<{
+    body: {
+      diskId: string;
+      fileId: string;
+      toDiskId: string;
+      toParentFileId: string;
+    };
+    fileId: string;
+  }>;
+}
+
+/**
+ *
+ * @param form
+ */
+export function moveNodes(form: IForm) {
+  return axios.put('/front/file/move', form);
+}
