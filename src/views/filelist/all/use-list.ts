@@ -3,6 +3,7 @@ import {
   IconPlus,
   IconDelete,
   IconShareAlt,
+  IconRotateRight,
 } from '@arco-design/web-vue/es/icon';
 import type { IColumn } from '@/components/list/types';
 import type { NodeRecord } from '@/api/filelist';
@@ -75,6 +76,12 @@ export default function useList() {
     {
       key: 'create-share',
       icon: IconShareAlt,
+      type: 'text' as const,
+      bulk: true,
+    },
+    {
+      key: 'create-move',
+      icon: IconRotateRight,
       type: 'text' as const,
       bulk: true,
     },

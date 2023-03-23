@@ -100,6 +100,8 @@
           states.data
         );
         break;
+      case 'create-move':
+        break;
       default:
     }
   };
@@ -233,6 +235,16 @@
             icon="icon-fenxiang2"
             icon-size="17"
             name="list.actions.create-share"
+          />
+        </template>
+
+        <template #create-move="{ action, onAction }: any">
+          <ButtonAction
+            :action="action"
+            :on-action="onAction"
+            icon="icon-jiandaojianqie"
+            icon-size="17"
+            name="list.actions.create-move"
           />
         </template>
 

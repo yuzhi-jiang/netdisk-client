@@ -26,6 +26,7 @@ export default {
   'list.actions.batch-delete': '删除',
   'list.actions.all-clear': '清空',
   'list.actions.create-share': '分享',
+  'list.actions.create-move': '移动',
   'list.actions.confirm.batch-recover': '是否确认恢复？',
   'list.actions.confirm.batch-delete': '是否确认删除？',
   'list.actions.confirm.all-clear': '是否确认清空？',
