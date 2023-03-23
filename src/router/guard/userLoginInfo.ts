@@ -14,7 +14,7 @@ export default function setupUserLoginInfoGuard(router: Router) {
 
     // 不进入login，而是指定定向到指定页面
     console.log('beforeEach', to);
-    if (to.name === 'register') {
+    if (['register', 'sharelist'].includes(to.name as string)) {
       next();
       return;
     }

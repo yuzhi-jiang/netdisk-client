@@ -31,6 +31,14 @@ const router = createRouter({
         requiresAuth: false,
       },
     },
+    {
+      path: '/sharelist/:shareId?/:parentFileId?',
+      name: 'sharelist',
+      component: () => import('@/views/sharelist/index.vue'),
+      meta: {
+        requiresAuth: false,
+      },
+    },
     ...appRoutes,
     REDIRECT_MAIN,
     NOT_FOUND_ROUTE,
