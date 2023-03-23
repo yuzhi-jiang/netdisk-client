@@ -1,6 +1,5 @@
 import Mock from 'mockjs';
 
-import './user';
 import './message-box';
 
 import '@/views/dashboard/workplace/mock';
@@ -8,9 +7,6 @@ import '@/views/dashboard/workplace/mock';
 import '@/views/dashboard/monitor/mock';
 import '@/views/visualization/data-analysis/mock';
 import '@/views/visualization/multi-dimension-data-analysis/mock';
-
-// import '@/views/user/info/mock';
-// import '@/views/user/setting/mock';
 
 // filelist
 import '@/views/filelist/mock';
