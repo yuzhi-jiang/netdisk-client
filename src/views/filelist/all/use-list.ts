@@ -1,5 +1,9 @@
 import { useI18n } from 'vue-i18n';
-import { IconPlus, IconDelete } from '@arco-design/web-vue/es/icon';
+import {
+  IconPlus,
+  IconDelete,
+  IconShareAlt,
+} from '@arco-design/web-vue/es/icon';
 import type { IColumn } from '@/components/list/types';
 import type { NodeRecord } from '@/api/filelist';
 
@@ -61,12 +65,18 @@ export default function useList() {
       trigger: true,
     },
     {
-      key: 'bulk-delete',
+      key: 'batch-delete',
       icon: IconDelete,
       type: 'text' as const,
       bulk: true,
       // confirm: true,
       // confirmText: 'list.actions.confirm.bulk-delete',
+    },
+    {
+      key: 'create-share',
+      icon: IconShareAlt,
+      type: 'text' as const,
+      bulk: true,
     },
   ];
 

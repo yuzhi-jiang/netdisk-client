@@ -15,11 +15,14 @@
   import useLoading from '@/hooks/loading';
   import useVisible from '@/hooks/visible';
   import { Message } from '@arco-design/web-vue';
+  import { IPostShareNode } from '@/api/shares';
   import { formatList, formatSize, paramsAdapter } from './utils';
   import useList from './use-list';
   import useInput from './use-input';
   import useTrigger from './use-trigger';
   import ModalForm from './components/modal-form.vue';
+  import ShareForm from './components/share-form.vue';
+  import ButtonAction from './components/button-action.vue';
 
   const $route = useRoute();
   const userStore = useUserStore();
@@ -30,10 +33,12 @@
   const { triggers } = useTrigger();
   const listRef = ref<InstanceType<typeof List>>();
   const modalRef = ref<InstanceType<typeof ModalForm>>();
+  const shareRef = ref<InstanceType<typeof ShareForm>>();
   const states = {
     reqParams: {} as ReqParams, // request params
     reqQueries: {} as ReqQueries, // request queries
     requests: [] as any,
+    data: {} as any,
   };
 
   const handleOperation = async () => {
@@ -64,14 +69,13 @@
   }) => {
     const { key } = action;
     const diskId = userStore.diskVo?.diskId;
-    states.requests = selectedKeys
-      ?.filter((fileId) => !!fileId)
-      .map((fileId) => ({
-        body: {
-          fileId,
-          diskId,
-        },
-      }));
+    selectedKeys = selectedKeys?.filter((fileId) => !!fileId);
+    states.requests = selectedKeys?.map((fileId) => ({
+      body: {
+        fileId,
+        diskId,
+      },
+    }));
     switch (key) {
       case 'create.dir': {
         const val = {
@@ -84,8 +88,17 @@
       case 'upload.file':
       case 'upload.dir':
         break;
-      case 'bulk-delete':
+      case 'batch-delete':
         setVisible(true);
+        break;
+      case 'create-share':
+        shareRef.value?.init(
+          {
+            diskId,
+            fileIdList: selectedKeys,
+          } as Partial<IPostShareNode>,
+          states.data
+        );
         break;
       default:
     }
@@ -100,9 +113,10 @@
     console.log(params);
     const { data } = await getFileList(params);
     if (data?.list) {
+      states.data = formatList(data.list);
       return {
         // must be format
-        data: formatList(data.list),
+        data: states.data,
         total: data.total,
       };
     }
@@ -202,6 +216,26 @@
           </a-popover>
         </template>
 
+        <template #batch-delete="{ action, onAction }: any">
+          <ButtonAction
+            :action="action"
+            :on-action="onAction"
+            icon="icon-shanchu"
+            icon-size="17"
+            name="list.actions.batch-delete"
+          />
+        </template>
+
+        <template #create-share="{ action, onAction }: any">
+          <ButtonAction
+            :action="action"
+            :on-action="onAction"
+            icon="icon-fenxiang2"
+            icon-size="17"
+            name="list.actions.create-share"
+          />
+        </template>
+
         <template #fileName="{ row, record }">
           <router-link
             :to="`/filelist/all/${record.type}/${record.fileId}`"
@@ -236,6 +270,7 @@
       <template #title> 提示 </template>
       <div> 是否确认删除 </div>
     </a-modal>
+    <ShareForm ref="shareRef" @success="onSuccess"></ShareForm>
     <ModalForm ref="modalRef" @success="onSuccess" />
   </div>
 </template>
