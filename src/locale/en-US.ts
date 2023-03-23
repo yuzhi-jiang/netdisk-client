@@ -5,9 +5,6 @@ import localeWorkplace from '@/views/dashboard/workplace/locale/en-US';
 
 import localeMonitor from '@/views/dashboard/monitor/locale/en-US';
 
-import localeSearchTable from '@/views/list/search-table/locale/en-US';
-import localeCardList from '@/views/list/card/locale/en-US';
-
 import localeDataAnalysis from '@/views/visualization/data-analysis/locale/en-US';
 import localeMultiDAnalysis from '@/views/visualization/multi-dimension-data-analysis/locale/en-US';
 
@@ -83,8 +80,6 @@ export default {
   ...localeWorkplace,
 
   ...localeMonitor,
-  ...localeSearchTable,
-  ...localeCardList,
   ...localeDataAnalysis,
   ...localeMultiDAnalysis,
   ...localeSuccess,
