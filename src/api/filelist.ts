@@ -102,9 +102,25 @@ export interface IForm {
 }
 
 /**
- *
+ * 移动内容
  * @param form
  */
 export function moveNodes(form: IForm) {
   return axios.put('/front/file/move', form);
+}
+
+export interface IDownFileRecord {
+  diskId: string;
+  fileId: string;
+}
+
+/**
+ * 获取文件下载链接，并可以预览
+ * @param params
+ * @returns
+ */
+export function getFileDownloadLink(params: IDownFileRecord) {
+  return axios.get('/front/file/getDownloadUrl', {
+    params,
+  });
 }
