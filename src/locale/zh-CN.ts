@@ -21,6 +21,8 @@ import localeUserSetting from '@/views/user/setting/locale/zh-CN';
 // customer
 import localeFileList from '@/views/filelist/locale/zh-CN';
 
+import localeShareList from '@/views/sharelist/locale/zh-CN';
+
 import localeSettings from './zh-CN/settings';
 import { importAllLocale } from './utils';
 
@@ -91,5 +93,6 @@ export default {
 
   // customer
   ...localeFileList,
+  ...localeShareList,
   ...importAllLocale('zh-CN'),
 };
