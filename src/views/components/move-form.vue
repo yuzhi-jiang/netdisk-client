@@ -6,6 +6,7 @@
   import { useUserStore } from '@/store';
   import { IconEmpty } from '@arco-design/web-vue/es/icon';
   import { NodeRecord, getFileList, ReqParams, IForm } from '@/api/filelist';
+  import { redirectLogin } from '@/router/utils';
 
   type ITreeNodeData = NodeRecord & TreeNodeData;
   interface IProps {
@@ -129,7 +130,21 @@
       pageNum: 1,
       pageSize: 1000,
     };
-    treeData.value = await getTreeData(params);
+
+    if (!diskId) {
+      redirectLogin();
+      setVisible(false);
+      return;
+    }
+
+    const nodeData = await getTreeData(params);
+    treeData.value = [
+      {
+        fileId: 'root',
+        fileName: '根目录',
+        children: nodeData,
+      },
+    ];
   };
   defineExpose({ init });
 </script>
