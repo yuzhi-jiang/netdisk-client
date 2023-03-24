@@ -2,17 +2,15 @@
   import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
   import { Form, Message } from '@arco-design/web-vue';
-  import { validateFileName } from '@/utils/validate';
   import useVisible from '@/hooks/visible';
   import useLoading from '@/hooks/loading';
-  import { Callback, FormSubmit } from '@/types/global';
+  import { FormSubmit } from '@/types/global';
   import { IPostShareNode, postShareNode } from '@/api/shares';
   import { NodeRecord } from '@/api/filelist';
   import dayjs from 'dayjs';
 
   const emits = defineEmits(['success']);
 
-  const { t } = useI18n();
   const genDefaultForm = (): IPostShareNode => ({
     diskId: '',
     fileIdList: [],

@@ -7,6 +7,7 @@
     ReqParams,
     ReqQueries,
     getFileList,
+    getFileDownloadLink,
     moveNodes,
   } from '@/api/filelist';
   import { addNodes } from '@/api/recycle';
@@ -23,7 +24,7 @@
   import useTrigger from './use-trigger';
   import ModalForm from './components/modal-form.vue';
   import ShareForm from './components/share-form.vue';
-  import MoveForm from '../components/move-form.vue';
+  import MoveForm from '../../components/move-form.vue';
   import ButtonAction from './components/button-action.vue';
 
   const $route = useRoute();
@@ -64,6 +65,13 @@
   const getNodeLink = (record: NodeRecord): string => {
     if (record.type === 'file') return '';
     return `/filelist/all/${record.type}/${record.fileId}`;
+  };
+
+  const handlePreview = async (record: NodeRecord): Promise<void> => {
+    console.log(record);
+    const { diskId, fileId } = record;
+    const { data } = await getFileDownloadLink({ diskId, fileId } as any);
+    console.log(data);
   };
 
   const onAction = async ({
@@ -262,7 +270,13 @@
         </template>
 
         <template #fileName="{ row, record }">
-          <router-link :to="getNodeLink(record)" class="netdisk-table-tr__name">
+          <router-link
+            :to="getNodeLink(record)"
+            class="netdisk-table-tr__name"
+            @click.stop="
+              record.type === 'file' ? handlePreview(record) : () => {}
+            "
+          >
             <IconFont
               :type="
                 record.type === 'folder' ? 'icon-wenjianjia2' : 'icon-file2'
