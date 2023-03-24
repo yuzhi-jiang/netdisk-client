@@ -68,3 +68,48 @@ export function clearShareBox(diskId: string) {
     },
   });
 }
+
+export interface IShareRouteReqParams {
+  shareId: string;
+  parentFileId: string;
+}
+
+export interface OtherShareParams {
+  shareId: string;
+  pageNum: number;
+  pageSize: number;
+  parentFileId: string;
+}
+
+/**
+ * 获取他人分享
+ * @param params
+ * @returns
+ */
+export function getOtherShares(params: OtherShareParams) {
+  return axios.get('/front/file/listByShare', {
+    params,
+  });
+}
+
+export interface IForm {
+  diskId: string;
+  requests: Array<{
+    body: {
+      diskId: string;
+      fileId: string;
+      toDiskId: string;
+      toParentFileId: string;
+    };
+    fileId: string;
+  }>;
+}
+
+/**
+ * 转存他人分享
+ * @param params
+ * @returns
+ */
+export function putOtherShares(params: IForm) {
+  return axios.put('/front/share/save', params);
+}
