@@ -13,21 +13,37 @@ export default function setupUserLoginInfoGuard(router: Router) {
     const userStore = useUserStore();
 
     // 不进入login，而是指定定向到指定页面
-    console.log('beforeEach', to);
+    console.log('beforeEach', from, to);
     if (['register', 'sharelist'].includes(to.name as string)) {
       next();
       return;
     }
+    to.redirectedFrom = from;
 
     if (isLogin()) {
       // isLogin, use token
       if (userStore.role) {
+        // white list
+        if (from.redirectedFrom?.name === 'sharelist') {
+          next({
+            path: from.redirectedFrom.fullPath,
+          });
+          return;
+        }
+
         next();
       } else {
         try {
           // get user info
           // 注册、登录成功后便获取信息，通过user_id
           await userStore.info();
+          // white list
+          if (from.redirectedFrom?.name === 'sharelist') {
+            next({
+              path: from.redirectedFrom.fullPath,
+            });
+            return;
+          }
           next();
         } catch (error) {
           await userStore.logout();
