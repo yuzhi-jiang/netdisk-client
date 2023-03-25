@@ -7,6 +7,7 @@ export default mergeConfig(
     mode: 'development',
     server: {
       open: true,
+      crossOriginIsolated: true,
       fs: {
         strict: true,
       },
