@@ -69,6 +69,10 @@
     }
   };
 
+  const saveOtherShares = async (formv: any) => {
+    return putOtherShares(formv, shareStore.shareToken as string);
+  };
+
   const onSuccess = () => {
     listRef.value?.reload();
   };
@@ -258,7 +262,7 @@
 
     <MoveForm
       ref="moveRef"
-      :request="putOtherShares"
+      :request="saveOtherShares"
       @success="onSuccess"
     ></MoveForm>
 

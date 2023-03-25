@@ -142,6 +142,10 @@ export interface IForm {
  * @param params
  * @returns
  */
-export function putOtherShares(params: IForm) {
-  return axios.put('/front/share/save', params);
+export function putOtherShares(params: IForm, shareToken: string) {
+  return axios.put('/front/share/save', params, {
+    headers: {
+      shareToken,
+    },
+  });
 }
