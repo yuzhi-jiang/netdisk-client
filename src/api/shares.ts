@@ -69,6 +69,35 @@ export function clearShareBox(diskId: string) {
   });
 }
 
+/**
+ * 获取他人分享的文件信息，如是否需要密码
+ * @param shareId
+ * @returns
+ */
+export function getShareInfo(shareId: string) {
+  return axios.get('/front/share/info', {
+    params: {
+      shareId,
+    },
+  });
+}
+
+export interface IShareTokenParams {
+  shareId: string;
+  sharePwd: string;
+}
+
+/**
+ * 获取token访问全西安
+ * @param params
+ * @returns
+ */
+export function getShareToken(params: IShareTokenParams) {
+  return axios.get('/front/share/getShareToken', {
+    params,
+  });
+}
+
 export interface IShareRouteReqParams {
   shareId: string;
   parentFileId: string;
@@ -86,9 +115,12 @@ export interface OtherShareParams {
  * @param params
  * @returns
  */
-export function getOtherShares(params: OtherShareParams) {
+export function getOtherShares(params: OtherShareParams, shareToken: string) {
   return axios.get('/front/file/listByShare', {
     params,
+    headers: {
+      shareToken,
+    },
   });
 }
 
