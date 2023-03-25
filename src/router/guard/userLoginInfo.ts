@@ -22,7 +22,13 @@ export default function setupUserLoginInfoGuard(router: Router) {
       next();
       return;
     }
-    to.redirectedFrom = from;
+
+    /**
+     * 特殊配置，如果从sharelist中跳转到login，则记录to.redirectedFrom = from
+     */
+    if (from.name === 'sharelist' && to.name === 'login') {
+      to.redirectedFrom = from;
+    }
 
     if (isLogin()) {
       // isLogin, use token

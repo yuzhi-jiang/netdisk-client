@@ -13,6 +13,7 @@
   import { IAction } from '@/components/list/types';
   import MoveForm from '@/views/components/move-form.vue';
   import { useUserStore, useShareListStore } from '@/store';
+  import { Message } from '@arco-design/web-vue';
   import useVisible from '@/hooks/visible';
   import useLoading from '@/hooks/loading';
   import { formatList, formatSize, paramsAdapter } from './utils';
@@ -74,6 +75,7 @@
   };
 
   const onSuccess = () => {
+    Message.success('操作成功');
     listRef.value?.reload();
   };
 
