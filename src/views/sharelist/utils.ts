@@ -47,15 +47,15 @@ export const paramsAdapter = (
 ) => {
   const { pageSize, page } = tableParams;
   const {
-    reqParams: { shareId, parentFileId = 'root' },
+    reqParams: { shareId, parentFileId },
   } = routeParams;
-  // console.log('tableParams ', tableParams);
+  // console.log('tableParams ', parentFileId);
   // adapter
   const pageNum = page;
 
   const params = {
     shareId,
-    parentFileId,
+    parentFileId: parentFileId || 'root',
     pageNum,
     pageSize,
   };

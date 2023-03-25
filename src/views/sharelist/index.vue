@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { NodeRecord } from '@/api/filelist';
   import {
@@ -12,7 +12,7 @@
   import List from '@/components/list/index.vue';
   import { IAction } from '@/components/list/types';
   import MoveForm from '@/views/components/move-form.vue';
-  import { useUserStore } from '@/store';
+  import { useUserStore, useShareListStore } from '@/store';
   import useVisible from '@/hooks/visible';
   import useLoading from '@/hooks/loading';
   import { formatList, formatSize, paramsAdapter } from './utils';
@@ -22,6 +22,7 @@
   const $route = useRoute();
   const router = useRouter();
   const userStore = useUserStore();
+  const shareStore = useShareListStore();
   const { columns, toolbar, actions } = useList();
   const { visible, setVisible } = useVisible();
   const { loading, setLoading } = useLoading();
@@ -33,9 +34,6 @@
   const states = {
     reqParams: {} as IShareRouteReqParams, // request params
     moveableFileDiskId: '' as string,
-    shareToken: '' as string,
-    hasPwd: true,
-    sharePwd: '' as string,
   };
 
   const onAction = async ({
@@ -81,20 +79,32 @@
    * 从 states 中 获取请求参数 shareId
    */
   const handleToken = async () => {
+    /**
+     * 先判断是否有Token
+     * 如果已经有Token则不请求
+     */
+    if (shareStore.shareToken) return;
+
     const {
       reqParams: { shareId },
     } = states;
     const { sharePwd } = form.value;
-    states.sharePwd = sharePwd;
+    shareStore.setSharePwd(sharePwd);
 
     try {
       setLoading(true);
       const {
         data: { shareToken },
       } = await getShareToken({ shareId, sharePwd });
-      states.shareToken = shareToken;
+      shareStore.setShareToken(shareToken);
       setVisible(false);
-      listRef.value?.reload();
+
+      /**
+       * 如果是具有密码的，那么此时应该reload，因为request已经过了
+       */
+      if (shareStore.hasPwd) {
+        await listRef.value?.reload();
+      }
     } catch (e) {
       setVisible(true);
     } finally {
@@ -108,30 +118,41 @@
    * 如不需要密码直接请求token
    */
   const beforeRequest = async () => {
+    /**
+     * 先判断是否需要密码
+     * 如果不需要密码 || 需要密码 & 存在密码
+     */
+    console.log(shareStore.hasPwd, shareStore.sharePwd);
+    if (!shareStore.hasPwd || (shareStore.hasPwd && shareStore.sharePwd))
+      return;
+
     const {
       reqParams: { shareId },
     } = states;
     const {
       data: { hasPwd },
     } = await getShareInfo(shareId);
-    states.hasPwd = hasPwd;
-    // const hasPwd = true;
+    shareStore.setHasPwd(hasPwd);
 
     if (hasPwd) {
+      /**
+       * 此时request已经过去，需要手动刷新
+       */
       setVisible(true);
       return;
     }
+
+    /**
+     * 无密码直接请求
+     */
     await handleToken();
   };
 
   const request = async (params = {}) => {
-    params = paramsAdapter(params as any, states);
-    // console.log(params);
-
     /**
      * 处理密码情况
      */
-    const { hasPwd, sharePwd } = states;
+    const { hasPwd, sharePwd, shareToken } = shareStore;
     if (hasPwd && !sharePwd) {
       setVisible(true);
       return {
@@ -140,7 +161,8 @@
       };
     }
 
-    const { data } = await getOtherShares(params as any, states.shareToken);
+    params = paramsAdapter(params as any, states);
+    const { data } = await getOtherShares(params as any, shareToken as string);
     if (data?.list) {
       const res = formatList(data.list);
       states.moveableFileDiskId = res[0].diskId as string;
@@ -164,9 +186,10 @@
     const { params, query } = $route;
 
     if (Object.keys(params).length !== 0) {
-      console.log(params);
+      // console.log(params);
       const { shareId, parentFileId } = params as any;
-      states.reqParams = { shareId, parentFileId };
+      states.reqParams.shareId = shareId;
+      states.reqParams.parentFileId = parentFileId;
     }
   };
   init();
@@ -232,6 +255,7 @@
         </template>
       </List>
     </a-space>
+
     <MoveForm
       ref="moveRef"
       :request="putOtherShares"
