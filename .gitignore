@@ -27,3 +27,4 @@ pnpm-lock*
 *.njsproj
 *.sln
 *.sw?
+src/views/filelist/all/index.7z

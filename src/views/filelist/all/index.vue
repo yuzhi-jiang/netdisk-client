@@ -46,6 +46,10 @@
     requests: [] as any,
     data: {} as any,
   };
+  const previewUrlConfig = ref({
+    url: '' as string,
+    visible: false,
+  });
 
   const handleOperation = async () => {
     setLoading(true);
@@ -73,7 +77,24 @@
     console.log(record);
     const { diskId, fileId } = record;
     const { data } = await getFileDownloadLink({ diskId, fileId } as any);
+
+    // https://docs.google.com/viewer?url=http://arm.todayto.com:8888/file/get/id?fileId=94058be9b5ea4d978791b37a791bb971
+    const baseUrl = 'http://175.178.167.193:8012/onlinePreview?url=';
+    const hostUrl = 'http://arm.todayto.com:8888/file/get/id?fileId='; // baseUrl+previewUrl
+
+    const fullUrl = `${hostUrl}${data.fileId}&fullfilename=${data.fileName}`;
+    const bytes = new TextEncoder().encode(fullUrl);
+    const byteArray = Array.from(bytes);
+    // 对字节序列进行 Base64 编码
+    const base64 = btoa(String.fromCharCode.apply(null, byteArray));
+    previewUrlConfig.value.url = `${baseUrl}${base64}`;
+    previewUrlConfig.value.visible = true;
+
     console.log(data);
+  };
+  const hidePreview = async () => {
+    previewUrlConfig.value.url = '';
+    previewUrlConfig.value.visible = false;
   };
 
   const onAction = async ({
@@ -175,6 +196,24 @@
 </script>
 
 <template>
+  <div
+    class="preview-wrapper"
+    :style="{
+      display: previewUrlConfig.visible ? 'flex' : 'none',
+    }"
+  >
+    <div class="modal-mask"></div>
+    <div class="preview-content">
+      <div class="preview-header">
+        <button class="close-btn" type="button" @click="hidePreview"
+          >&times;</button
+        >
+        <!-- <div class="preview-cancel-button" @click="hidePreview">取消</div> -->
+      </div>
+      <iframe :src="previewUrlConfig.url"></iframe>
+    </div>
+  </div>
+
   <div>
     <a-space direction="vertical" class="container">
       <!-- <a-breadcrumb :max-count="maxCount" :routes="routes" /> -->
@@ -341,5 +380,90 @@
     font-size: 13px;
     text-decoration: none;
     cursor: pointer;
+  }
+
+  .preview-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .modal-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0 0 0 / 50%);
+  }
+
+  .preview-content {
+    position: relative;
+    z-index: 1;
+    width: 80%;
+    height: 80%;
+    max-height: 80%;
+    max-height: 90%;
+  }
+
+  .preview-content iframe {
+    width: 100%;
+    height: 100%;
+  }
+
+  .preview-header {
+    position: absolute;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 40px;
+    background-color: #f1f1f1;
+    border-radius: 5px 0 0;
+  }
+
+  .preview-cancel-button {
+    margin-right: 10px;
+    padding: 8px;
+    color: #555;
+    font-weight: bold;
+    font-size: 14px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+    cursor: pointer;
+  }
+
+  .close-btn {
+    position: absolute;
+
+    /* 设置为绝对定位，以便在右上角显示 */
+    top: 10px;
+    right: 10px;
+    color: #999;
+
+    /* 设置颜色 */
+    font-size: 1.5rem;
+
+    /* 设置大小 */
+    font-family: Arial, sans-serif;
+
+    /* 设置字体 */
+    background: none;
+
+    /* 去掉背景 */
+    border: none;
+
+    /* 去掉边框 */
+    cursor: pointer;
+
+    /* 设置鼠标样式 */
   }
 </style>
