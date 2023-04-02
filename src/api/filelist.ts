@@ -124,3 +124,7 @@ export function getFileDownloadLink(params: IDownFileRecord) {
     params,
   });
 }
+
+export function upload() {
+  //
+}

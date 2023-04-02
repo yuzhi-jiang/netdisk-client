@@ -24,6 +24,7 @@
   import useTrigger from './use-trigger';
   import ModalForm from './components/modal-form.vue';
   import ShareForm from './components/share-form.vue';
+  import UploadForm from './components/upload-form.vue';
   import MoveForm from '../../components/move-form.vue';
   import ButtonAction from './components/button-action.vue';
 
@@ -38,6 +39,7 @@
   const modalRef = ref<InstanceType<typeof ModalForm>>();
   const shareRef = ref<InstanceType<typeof ShareForm>>();
   const moveRef = ref<InstanceType<typeof MoveForm>>();
+  const uploadRef = ref<InstanceType<typeof UploadForm>>();
   const states = {
     reqParams: {} as ReqParams, // request params
     reqQueries: {} as ReqQueries, // request queries
@@ -103,6 +105,7 @@
       }
       case 'upload.file':
       case 'upload.dir':
+        uploadRef.value?.init();
         break;
       case 'batch-delete':
         setVisible(true);
@@ -308,11 +311,8 @@
     </a-modal>
     <ShareForm ref="shareRef" @success="onSuccess"></ShareForm>
     <ModalForm ref="modalRef" @success="onSuccess" />
-    <MoveForm
-      ref="moveRef"
-      :request="moveNodes"
-      @success="onSuccess"
-    ></MoveForm>
+    <MoveForm ref="moveRef" :request="moveNodes" @success="onSuccess" />
+    <UploadForm ref="uploadRef" />
   </div>
 </template>
 
