@@ -1,3 +1,5 @@
+import sha1 from 'sha1';
+
 export const fileToBase64 = function fileToBase64(file: any): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -49,6 +51,19 @@ const readBlobJson = async (data: Blob) => {
     };
 
     reader.readAsText(data);
+  });
+};
+export const getfilehash = function getfilehash(file: any): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const hash = sha1(file);
+      resolve(hash);
+    };
+    reader.onerror = (error: any) => {
+      reject(error);
+    };
+    reader.readAsDataURL(file);
   });
 };
 
