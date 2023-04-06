@@ -56,14 +56,16 @@ const readBlobJson = async (data: Blob) => {
 export const getfilehash = function getfilehash(file: any): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onloadend = () => {
-      const hash = sha1(file);
+    reader.onload = (ev) => {
+      const data: string = ev.target?.result as string; // 获取读取的数据
+      debugger
+      const hash = sha1(data);
       resolve(hash);
     };
     reader.onerror = (error: any) => {
       reject(error);
     };
-    reader.readAsDataURL(file);
+    reader.readAsText(file);
   });
 };
 

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-const VITE_API_BASE_URL = process.env['VITE_API_BASE_URL'];
+const VITE_API_BASE_URL = 'http://192.168.196.80:8082';
 
 export type FileParams = {
   checkNameMode: 'auto_rename' | 'overwrite' | 'refuse';

@@ -127,7 +127,7 @@ const onAction = async ({
     case 'upload.file':
     case 'upload.dir':
       const { parentFileId } = states.reqParams
-      uploadRef.value?.init(diskId,parentFileId);
+      uploadRef.value?.init(diskId as string, parentFileId as string);
       break;
     case 'batch-delete':
       setVisible(true);
