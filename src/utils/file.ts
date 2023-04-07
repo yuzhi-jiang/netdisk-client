@@ -53,19 +53,20 @@ const readBlobJson = async (data: Blob) => {
     reader.readAsText(data);
   });
 };
-export const getfilehash = function getfilehash(file: any): Promise<string> {
+export const getfilehash = (file: any): Promise<string> =>{
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = (ev) => {
-      const data: string = ev.target?.result as string; // 获取读取的数据
-      debugger
-      const hash = sha1(data);
-      resolve(hash);
+    reader.onload = async (ev) => {
+      const data:ArrayBuffer = ev.target?.result as ArrayBuffer; // 获取读取的数据
+      const hashBuffer = await crypto.subtle.digest('SHA-1', data);           // hash the message
+      const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
+      resolve(hashHex);
     };
     reader.onerror = (error: any) => {
       reject(error);
     };
-    reader.readAsText(file);
+    reader.readAsArrayBuffer(file);
   });
 };
 

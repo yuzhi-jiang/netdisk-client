@@ -117,6 +117,7 @@ const onAction = async ({
   }));
   switch (key) {
     case 'create.dir': {
+      debugger
       const val = {
         ...states.reqParams,
         diskId: userStore.$state.diskVo?.diskId,
@@ -127,6 +128,7 @@ const onAction = async ({
     case 'upload.file':
     case 'upload.dir':
       const { parentFileId } = states.reqParams
+      debugger
       uploadRef.value?.init(diskId as string, parentFileId as string);
       break;
     case 'batch-delete':

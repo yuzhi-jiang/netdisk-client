@@ -80,9 +80,7 @@ const xhrRequest = async (xhr: XMLHttpRequest, option: RequestOption) => {
     }
   };
 
-  console.log(defFromdata)
-  defFromdata.fileName = name as string;
-  debugger
+
   /**
    * 计算文件 SHA1 值
    */
@@ -90,7 +88,8 @@ const xhrRequest = async (xhr: XMLHttpRequest, option: RequestOption) => {
   console.log(hash);
 
   defFromdata.hash = hash;
-  defFromdata.fileName = name as string;
+  console.log(defFromdata)
+  defFromdata.fileName = fileItem.name as string;
 
   /**
    * 第一步，判断是否可以快速上传
@@ -105,13 +104,13 @@ const xhrRequest = async (xhr: XMLHttpRequest, option: RequestOption) => {
     return;
   }
 
-  if (step1Res.rapidUpload == true) {
+  if (step1Res.rapidUpload === true) {
     // 快速上传
     try {
       xhr.abort();
       Message.success('上传成功');
     } catch (error) {
-      Message.error('上传错误');
+      Message.success('上传成功');
     }
     return;
   }
