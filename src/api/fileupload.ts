@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const VITE_API_BASE_URL = 'http://arm.todayto.com:8082';
 
@@ -41,8 +41,13 @@ export function createWithFolders(params: FileParams) {
 
 export const XHR_UPLOAD_URL = `${VITE_API_BASE_URL}/front/file/uploadPart`;
 
-export function uploadPart(params: uploadPartParams) {
-  return axios.post('/front/file/uploadPart', params);
+export function uploadPart(params: uploadPartParams, config?: AxiosRequestConfig) {
+  const { file, token, uploadId } = params
+  const formData = new FormData();
+  formData.append('file', file as File);
+  formData.append('token', token as string);
+  formData.append('uploadId', uploadId as string);
+  return axios.put('/front/file/uploadPart', formData, config);
 }
 export function complete(params: completeParams) {
   return axios.post('/front/file/complete', params);

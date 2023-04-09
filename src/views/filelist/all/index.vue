@@ -88,8 +88,9 @@ const handlePreview = async (record: NodeRecord): Promise<void> => {
   // 对字节序列进行 Base64 编码
   const base64 = btoa(String.fromCharCode.apply(null, byteArray));
   previewUrlConfig.value.url = `${baseUrl}${base64}`;
+  // previewUrlConfig.value.url = 'https://docs.google.com/viewer?url=http://arm.todayto.com:8888/file/get/id?fileId=a3445ffb01a046fd8295c49a5332813a'
   previewUrlConfig.value.visible = true;
-
+  // window.open('https://docs.google.com/viewer?url=http://arm.todayto.com:8888/file/get/id?fileId=a3445ffb01a046fd8295c49a5332813a')
   console.log(data);
 };
 const hidePreview = async () => {
@@ -117,7 +118,6 @@ const onAction = async ({
   }));
   switch (key) {
     case 'create.dir': {
-      debugger
       const val = {
         ...states.reqParams,
         diskId: userStore.$state.diskVo?.diskId,
@@ -128,7 +128,6 @@ const onAction = async ({
     case 'upload.file':
     case 'upload.dir':
       const { parentFileId } = states.reqParams
-      debugger
       uploadRef.value?.init(diskId as string, parentFileId as string);
       break;
     case 'batch-delete':

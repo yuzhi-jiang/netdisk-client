@@ -53,11 +53,11 @@ const readBlobJson = async (data: Blob) => {
     reader.readAsText(data);
   });
 };
-export const getfilehash = (file: any): Promise<string> =>{
+export const getfilehash = (file: any): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = async (ev) => {
-      const data:ArrayBuffer = ev.target?.result as ArrayBuffer; // 获取读取的数据
+      const data: ArrayBuffer = ev.target?.result as ArrayBuffer; // 获取读取的数据
       const hashBuffer = await crypto.subtle.digest('SHA-1', data);           // hash the message
       const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
       const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
@@ -116,4 +116,12 @@ export function dataURLtoFile(dataurl: string, filename: string) {
   return new File([u8arr], filename, {
     type: arr[0].split(';')[0],
   });
+}
+export function formatBytes(bytes:number, decimals?:number) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const dm = decimals? + 1 : 3;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }

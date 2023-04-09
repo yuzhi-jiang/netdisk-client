@@ -11,11 +11,15 @@ import {
   XHR_UPLOAD_URL,
 } from '@/api/fileupload';
 import { FileParams, uploadPartParams } from '@/api/fileupload';
-import { getfilehash } from '@/utils/file';
+import { formatBytes, getfilehash } from '@/utils/file';
+import axios, { AxiosRequestConfig } from 'axios';
 
 defineEmits(['success']);
 const route = useRoute();
 const { visible, setVisible } = useVisible();
+let source: any; // to store the cancel token source
+let paused: boolean = false; // to check if file upload is paused
+
 const defFromdata: FileParams = {
   checkNameMode: 'auto_rename',
   parentFileId: '',
@@ -29,61 +33,116 @@ const defUploadPart: uploadPartParams = {
   token: undefined,
   uploadId: undefined,
 };
+const config = (option: RequestOption): AxiosRequestConfig => {
+  const { onProgress, onError, onSuccess, fileItem, name } = option;
+  let start = 0;
+  start = Date.now();
+  return {
 
-const xhrRequest = async (xhr: XMLHttpRequest, option: RequestOption) => {
-  const { onError, onSuccess, onProgress, fileItem, name } = option;
+    onUploadProgress: (event) => {
 
-  if (xhr.upload) {
-    xhr.upload.onprogress = (event) => {
+      let loaded = 0;
       let percent = 0;
       if (event.total > 0) {
-        /**
-         * 百分比
-         */
+        // 0 ~ 1
         percent = event.loaded / event.total;
+        console.log(percent)
+        loaded = event.loaded;
+        const end = Date.now();
+        const time = end - start;
+        const sizeInBytes = loaded;
+        const speedInBytesPerSecond = sizeInBytes / (time / 1000);
+
+        console.log(`上传速度为 ${formatBytes(speedInBytesPerSecond)}/s`);
       }
-      onProgress(percent, event);
-    };
+      if (!paused) {
+        onProgress(percent, event);
+      } else {
+        console.log('结束一')
+        source.cancel('File upload paused');
+      }
+    },
+    cancelToken: source.token
   }
+}
 
-  xhr.onerror = (e) => {
-    onError(e);
-  };
 
-  xhr.onload = async () => {
-    if (xhr.status < 200 || xhr.status >= 300) {
-      onError(xhr.responseText);
-      return;
+const createWithFolders1 = async (params: FileParams, option: RequestOption) => {
+  const { onProgress, onError, onSuccess, fileItem, name } = option;
+  const { data } = await createWithFolders(defFromdata);
+
+  if (data.rapidUpload === true) {
+    setInterval(() => onProgress(50), 500)
+    setInterval(() => onProgress(100), 1000)
+
+
+    setInterval(() => {
+      onSuccess()
+      setVisible(false);
+    }, 1500)
+    return;
+  }
+  const { token, uploadId } = data;
+  if (!token || !uploadId) {
+    onError("上传失败")
+    return;
+  }
+  defUploadPart.token = token
+  defUploadPart.file = fileItem.file
+  defUploadPart.uploadId = uploadId
+  uploadPart1(defUploadPart, option);
+};
+
+const uploadPart1 = async (defUploadPart: uploadPartParams, option: RequestOption) => {
+  const { onError } = option;
+  const uploadId = defUploadPart.uploadId as string
+  // const res: any = await axios.put('http://127.0.0.1:8082/front/file/uploadPart', formData, config(option));
+  uploadPart(defUploadPart, config(option)).then(res => {
+    const { fileId } = res.data
+    if (fileId) {
+      complete1(fileId, uploadId, defFromdata.diskId, option)
+    } else {
+      onError("上传失败")
     }
-    /**
-     * 第三步 确认
-     */
-    Message.success('上传成功');
-
-    const {
-      data: { fileId },
-    } = JSON.parse(xhr.response);
-    debugger
-    try {
-      const { code, msg }: any = await complete({
-        fileId,
-        uploadId,
-        diskId: defFromdata.diskId,
-      });
-      if (code === 501) {
-        Message.error(msg);
-        return;
+  })
+    .catch((error: { message: any; }) => {
+      if (axios.isCancel(error)) {
+        console.log('File upload canceled:', error.message);
+      } else {
+        console.error('File upload failed:', error);
       }
-      onSuccess(xhr.response);
-    } catch (error) {
-      Message.error('第三步错误');
-    }
-  };
+    });
+}
+const complete1 = async (fileId: string, uploadId: string, diskId: string, option: RequestOption) => {
+  const { onProgress, onError, onSuccess, fileItem, name } = option;
+  const { code, msg }: any = await complete({
+    fileId,
+    uploadId,
+    diskId
+  });
+
+  if (code === 501) {
+    Message.error(msg);
+    return;
+  }
+  onSuccess();
+  setVisible(false);
+}
+
+
+
+const resumeUpload = (option: RequestOption) => {
+  source = axios.CancelToken.source();
+  uploadPart1(defUploadPart, option)
+}
+const main = async (option: RequestOption) => {
+  const { onProgress, onError, onSuccess, fileItem, name } = option;
+  source = axios.CancelToken.source();
 
 
   /**
-   * 计算文件 SHA1 值
-   */
+ * 计算文件 SHA1 值
+ */
   const hash = await getfilehash(fileItem.file);
   console.log(hash);
 
@@ -91,80 +150,45 @@ const xhrRequest = async (xhr: XMLHttpRequest, option: RequestOption) => {
   console.log(defFromdata)
   defFromdata.fileName = fileItem.name as string;
 
-  /**
-   * 第一步，判断是否可以快速上传
-   */
+  createWithFolders1(defFromdata, option);
+}
 
-  let step1Res: any;
-  try {
-    const res = await createWithFolders(defFromdata);
-    step1Res = res.data;
-  } catch (error) {
-    Message.error('第一步出错');
-    return;
+const UploadRequest = (option: RequestOption): UploadRequest => {
+  const { onProgress, onError, onSuccess, fileItem, name } = option;
+
+  console.log('开始上传')
+  if (paused) {
+    paused = false;
+    resumeUpload(option);
+  } else {
+    main(option)
   }
 
-  if (step1Res.rapidUpload === true) {
-    // 快速上传
-    try {
-      xhr.abort();
-      Message.success('上传成功');
-    } catch (error) {
-      Message.success('上传成功');
-    }
-    return;
-  }
-
-  /**
-   * 第二步：上传文件
-   */
-  const { token, uploadId } = step1Res;
-  let fileId: string;
-  try {
-    const formData = new FormData();
-    formData.append('file', fileItem.file as File);
-    formData.append('token', token);
-    formData.append('uploadId', uploadId);
-    xhr.open('put', XHR_UPLOAD_URL, true);
-    xhr.send(formData);
-  } catch (error) {
-    Message.error('第二步骤出错');
-    return;
-  }
-};
-
-const customRequest = (option: RequestOption): UploadRequest => {
-  const xhr = new XMLHttpRequest();
-
-  // formData.append(name || 'file', fileItem.file);
-  // if (typeof name === 'string' && fileItem.file) {
-
-  // } else if (typeof name === 'function' && fileItem.file) {
-  //   formData.append(name(fileItem), fileItem.file);
-  // }
-
-  xhrRequest(xhr, option);
-
-  const abort = () => {
-    xhr.abort();
-  };
 
   return {
-    abort,
-  };
-};
+    abort() {
+      console.log("结束")
+      paused = true;
+      source.cancel('File upload aborted');
+    }
+  }
+}
 
 const init = async (diskId: string, parentFileId: string) => {
   defFromdata.diskId = diskId;
+  if (parentFileId == '') {
+    parentFileId = 'root';
+  }
   defFromdata.parentFileId = parentFileId;
   setVisible(true);
 };
 
 defineExpose({ init });
+
 </script>
 
 <template>
-  <a-modal v-model:visible="visible" title="上传" :footer="false" :unmount-on-close="true" title-align="start">
-    <a-upload :custom-request="customRequest" draggable></a-upload>
-  </a-modal>
+  <AModal v-model:visible="visible" title="上传" :footer="false" :unmount-on-close="true" title-align="start">
+    <AUpload :custom-request="UploadRequest" draggable></AUpload>
+  </AModal>
 </template>
