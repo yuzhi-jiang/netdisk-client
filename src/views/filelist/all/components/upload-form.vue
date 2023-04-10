@@ -19,7 +19,7 @@ const route = useRoute();
 const { visible, setVisible } = useVisible();
 let source: any; // to store the cancel token source
 let paused: boolean = false; // to check if file upload is paused
-
+let hasUploadParams: boolean = false; // to check if file upload is paused
 const defFromdata: FileParams = {
   checkNameMode: 'auto_rename',
   parentFileId: '',
@@ -77,7 +77,7 @@ const createWithFolders1 = async (params: FileParams, option: RequestOption) => 
 
 
     setInterval(() => {
-      onSuccess()
+      successUpload(onSuccess)
       setVisible(false);
     }, 1500)
     return;
@@ -90,6 +90,7 @@ const createWithFolders1 = async (params: FileParams, option: RequestOption) => 
   defUploadPart.token = token
   defUploadPart.file = fileItem.file
   defUploadPart.uploadId = uploadId
+  hasUploadParams = true;
   uploadPart1(defUploadPart, option);
 };
 
@@ -104,13 +105,13 @@ const uploadPart1 = async (defUploadPart: uploadPartParams, option: RequestOptio
     } else {
       onError("上传失败")
     }
-  })
-    .catch((error: { message: any; }) => {
+  }).catch((error) => {
       if (axios.isCancel(error)) {
         console.log('File upload canceled:', error.message);
       } else {
         console.error('File upload failed:', error);
       }
+      return
     });
 }
 const complete1 = async (fileId: string, uploadId: string, diskId: string, option: RequestOption) => {
@@ -125,11 +126,16 @@ const complete1 = async (fileId: string, uploadId: string, diskId: string, optio
     Message.error(msg);
     return;
   }
-  onSuccess();
+  successUpload(onSuccess)
   setVisible(false);
 }
 
-
+const successUpload = (callback: Function) => {
+  hasUploadParams = false;
+  callback()
+  console.log('成功')
+  return;
+}
 
 const resumeUpload = (option: RequestOption) => {
   source = axios.CancelToken.source();
@@ -157,7 +163,7 @@ const UploadRequest = (option: RequestOption): UploadRequest => {
   const { onProgress, onError, onSuccess, fileItem, name } = option;
 
   console.log('开始上传')
-  if (paused) {
+  if (paused && hasUploadParams) {
     paused = false;
     resumeUpload(option);
   } else {
