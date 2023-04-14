@@ -13,8 +13,8 @@ import {
 import { FileParams, uploadPartParams } from '@/api/fileupload';
 import { formatBytes, getFileHash } from '@/utils/file';
 import axios, { AxiosRequestConfig } from 'axios';
+const emits = defineEmits(['success']);
 
-defineEmits(['success']);
 const route = useRoute();
 const { visible, setVisible } = useVisible();
 let source: any; // to store the cancel token source
@@ -78,6 +78,7 @@ const createWithFolders1 = async (params: FileParams, option: RequestOption) => 
 
     setInterval(() => {
       successUpload(onSuccess)
+      emits('success');
       setVisible(false);
     }, 1500)
     return;
@@ -127,6 +128,7 @@ const complete1 = async (fileId: string, uploadId: string, diskId: string, optio
     return;
   }
   successUpload(onSuccess)
+  emits('success');
   setVisible(false);
 }
 
@@ -151,7 +153,7 @@ const main = async (option: RequestOption) => {
  */
   const hash = await getFileHash(fileItem.file);
   console.log(hash);
-
+  
   defFromdata.hash = hash;
   console.log(defFromdata)
   defFromdata.fileName = fileItem.name as string;

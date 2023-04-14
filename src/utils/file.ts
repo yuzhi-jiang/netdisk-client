@@ -1,4 +1,5 @@
-import sha1 from 'sha1';
+import { SHA1, enc  } from 'crypto-js';
+import  WordArray  from 'crypto-js/lib-typedarrays';
 
 export const fileToBase64 = function fileToBase64(file: any): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -57,11 +58,12 @@ export const getFileHash = (file: any): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = async (ev) => {
-      const data: ArrayBuffer = ev.target?.result as ArrayBuffer; // 获取读取的数据
-      const hashBuffer = await crypto.subtle.digest('SHA-1', data);           // hash the message
-      const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
-      resolve(hashHex);
+      const buffer = new Uint8Array(reader.result as ArrayBuffer);
+      const wordArray = WordArray.create(buffer as any);
+      const sha1 = SHA1(wordArray);
+      const hex = sha1.toString(enc.Hex);
+    
+      resolve(hex);
     };
     reader.onerror = (error: any) => {
       reject(error);

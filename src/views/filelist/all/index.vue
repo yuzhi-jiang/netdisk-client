@@ -287,7 +287,7 @@ document.title = 'Netdisk 首页';
     <ShareForm ref="shareRef" @success="onSuccess"></ShareForm>
     <ModalForm ref="modalRef" @success="onSuccess" />
     <MoveForm ref="moveRef" :request="moveNodes" @success="onSuccess" />
-    <UploadForm ref="uploadRef" />
+    <UploadForm ref="uploadRef" @success="onSuccess"/>
   </div>
 </template>
 
