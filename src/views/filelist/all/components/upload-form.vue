@@ -11,7 +11,7 @@ import {
   XHR_UPLOAD_URL,
 } from '@/api/fileupload';
 import { FileParams, uploadPartParams } from '@/api/fileupload';
-import { formatBytes, getfilehash } from '@/utils/file';
+import { formatBytes, getFileHash } from '@/utils/file';
 import axios, { AxiosRequestConfig } from 'axios';
 
 defineEmits(['success']);
@@ -149,7 +149,7 @@ const main = async (option: RequestOption) => {
   /**
  * 计算文件 SHA1 值
  */
-  const hash = await getfilehash(fileItem.file);
+  const hash = await getFileHash(fileItem.file);
   console.log(hash);
 
   defFromdata.hash = hash;

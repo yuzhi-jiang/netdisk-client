@@ -53,7 +53,7 @@ const readBlobJson = async (data: Blob) => {
     reader.readAsText(data);
   });
 };
-export const getfilehash = (file: any): Promise<string> => {
+export const getFileHash = (file: any): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = async (ev) => {
