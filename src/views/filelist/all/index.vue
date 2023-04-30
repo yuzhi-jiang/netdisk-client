@@ -261,6 +261,11 @@ document.title = 'Netdisk 首页';
             name="list.actions.create-move" />
         </template>
 
+        <template #batch-download="{ action, onAction }: any">
+          <ButtonAction :action="action" :on-action="onAction" icon="icon-arrowBottom" icon-size="17"
+            name="list.actions.batch-download" />
+        </template>
+
         <template #fileName="{ row, record }">
           <router-link :to="getNodeLink(record)" class="netdisk-table-tr__name" @click.stop="
             record.type === 'file' ? handlePreview(record) : () => { }

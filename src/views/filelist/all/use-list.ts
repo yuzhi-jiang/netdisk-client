@@ -4,6 +4,7 @@ import {
   IconDelete,
   IconShareAlt,
   IconRotateRight,
+  IconDownload,
 } from '@arco-design/web-vue/es/icon';
 import type { IColumn } from '@/components/list/types';
 import type { NodeRecord } from '@/api/filelist';
@@ -82,6 +83,12 @@ export default function useList() {
     {
       key: 'create-move',
       icon: IconRotateRight,
+      type: 'text' as const,
+      bulk: true,
+    },
+    {
+      key: 'batch-download',
+      icon: IconDownload,
       type: 'text' as const,
       bulk: true,
     },
