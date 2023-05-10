@@ -27,6 +27,9 @@ import ShareForm from './components/share-form.vue';
 import UploadForm from './components/upload-form.vue';
 import MoveForm from '../../components/move-form.vue';
 import ButtonAction from './components/button-action.vue';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+
+
 
 const $route = useRoute();
 const userStore = useUserStore();
@@ -98,6 +101,73 @@ const hidePreview = async () => {
   previewUrlConfig.value.visible = false;
 };
 
+/**
+ * 下载文件并显示进度
+ * @param url 文件下载地址
+ * @param fileName 文件名
+ * @param onProgress 进度回调函数
+ */
+function downloadFileWithProgress(url: string, fileName: string, onProgress?: (loaded: number, total: number) => void): void {
+  // axios.get(url, {
+  //   responseType: 'blob'
+  // })
+  //   .then(response => {
+  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+  //     const link = document.createElement('a');
+  //     link.href = url;
+  //     link.setAttribute('download', 'file.bin');
+  //     document.body.appendChild(link);
+  //     link.click();
+  //   });
+  // axios.get(url, {
+  //   onDownloadProgress: (evt) => {
+  //     // console.log("progressEvent===",evt )
+  //     // 对原生进度事件的处理
+  //     // const percent: number = Math.round((loaded / total) * 100);
+  //     // console.log(`已下载 ${percent}%`);
+  //     if (onProgress) {
+  //       onProgress(evt.loaded, evt.total)
+  //     }
+  //     // this.setState({ progress: });
+  //   }
+  // })
+}
+
+const handleDownload = async (record: NodeRecord): Promise<void> => {
+  console.log(record);
+  const { diskId, fileId } = record;
+  const { data } = await getFileDownloadLink({ diskId, fileId } as any);
+
+  // https://docs.google.com/viewer?url=http://arm.todayto.com:8888/file/get/id?fileId=94058be9b5ea4d978791b37a791bb971
+  const baseUrl = 'http://175.178.167.193:8012/onlinePreview?url=';
+  const hostUrl = 'http://arm.todayto.com:8888/file/get/id?fileId='; // baseUrl+previewUrl
+
+  const fullUrl = `${hostUrl}${data.fileId}&fullfilename=${data.fileName}`;
+  // const fileUrl: string = URL.createObjectURL(blob);
+  // // 创建a标签并触发点击下载
+  const link: HTMLAnchorElement = document.createElement('a');
+  link.href = fullUrl;
+  link.download = data.fileName;
+  link.click();
+  // downloadFileWithProgress(
+  //   fullUrl,
+  //   data.fileName,
+  //   (loaded: number, total: number): void => {
+  //     const percent: number = Math.round((loaded / total) * 100);
+  //     console.log(`已下载 ${percent}%`);
+  //   }
+  // );
+
+  // const bytes = new TextEncoder().encode(fullUrl);
+  // const byteArray = Array.from(bytes);
+  // // 对字节序列进行 Base64 编码
+  // const base64 = btoa(String.fromCharCode.apply(null, byteArray));
+  // previewUrlConfig.value.url = `${baseUrl}${base64}`;
+  // // previewUrlConfig.value.url = 'https://docs.google.com/viewer?url=http://arm.todayto.com:8888/file/get/id?fileId=a3445ffb01a046fd8295c49a5332813a'
+  // previewUrlConfig.value.visible = true;
+  // // window.open('https://docs.google.com/viewer?url=http://arm.todayto.com:8888/file/get/id?fileId=a3445ffb01a046fd8295c49a5332813a')
+  // console.log(data);
+}
 const onAction = async ({
   action,
   record,
@@ -148,6 +218,14 @@ const onAction = async ({
         selectedKeys,
         moveableFileDiskId: diskId,
       } as any);
+      break;
+    case 'batch-download':
+
+      selectedKeys?.forEach((fileId) => {
+        const record = { diskId: diskId, fileId: fileId }
+        handleDownload(record as unknown as NodeRecord)
+      })
+
       break;
     default:
   }
@@ -292,7 +370,7 @@ document.title = 'Netdisk 首页';
     <ShareForm ref="shareRef" @success="onSuccess"></ShareForm>
     <ModalForm ref="modalRef" @success="onSuccess" />
     <MoveForm ref="moveRef" :request="moveNodes" @success="onSuccess" />
-    <UploadForm ref="uploadRef" @success="onSuccess"/>
+    <UploadForm ref="uploadRef" @success="onSuccess" />
   </div>
 </template>
 
