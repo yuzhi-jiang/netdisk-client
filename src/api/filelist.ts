@@ -60,7 +60,7 @@ export function postFolder(params: ReqParams) {
   return axios.post('/front/file/createWithFolders', params);
 }
 
-export function postFile() {}
+export function postFile() { }
 
 /**
  * 修改文件/文件夹名称
@@ -108,7 +108,9 @@ export interface IForm {
 export function moveNodes(form: IForm) {
   return axios.put('/front/file/move', form);
 }
-
+export function copyNodes(form: IForm) {
+  return axios.put('/front/file/copy', form);
+}
 export interface IDownFileRecord {
   diskId: string;
   fileId: string;

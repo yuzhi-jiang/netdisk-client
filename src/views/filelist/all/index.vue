@@ -9,6 +9,7 @@ import {
   getFileList,
   getFileDownloadLink,
   moveNodes,
+  copyNodes,
 } from '@/api/filelist';
 import { addNodes } from '@/api/recycle';
 import { useUserStore } from '@/store';
@@ -42,6 +43,7 @@ const listRef = ref<InstanceType<typeof List>>();
 const modalRef = ref<InstanceType<typeof ModalForm>>();
 const shareRef = ref<InstanceType<typeof ShareForm>>();
 const moveRef = ref<InstanceType<typeof MoveForm>>();
+const copyRef = ref<InstanceType<typeof MoveForm>>();
 const uploadRef = ref<InstanceType<typeof UploadForm>>();
 const states = {
   reqParams: {} as ReqParams, // request params
@@ -219,6 +221,13 @@ const onAction = async ({
         moveableFileDiskId: diskId,
       } as any);
       break;
+    case 'create-copy':
+      copyRef.value?.init({
+        diskId,
+        selectedKeys,
+        moveableFileDiskId: diskId,
+      } as any);
+      break;
     case 'batch-download':
 
       selectedKeys?.forEach((fileId) => {
@@ -295,26 +304,26 @@ document.title = 'Netdisk 首页';
       <List ref="listRef" :toolbar="toolbar" :columns="columns" :actions="[]" :request="request" row-key="fileId"
         @action="onAction">
         <template #search="{ action }: any">
-          <a-input-search v-model="content" :style="{ width: '280px', marginLeft: '8px' }"
-            :placeholder="$t(action.placeholder || '')" search-button allow-clear @press-enter="okSearch(content)"
-            @clear="clearInput" @search="okSearch(content)" />
+          <a-input-search v-model=" content " :style=" { width: '280px', marginLeft: '8px' } "
+            :placeholder=" $t(action.placeholder || '') " search-button allow-clear @press-enter=" okSearch(content) "
+            @clear=" clearInput " @search=" okSearch(content) " />
         </template>
 
         <!-- acions.key -->
-        <template #create="{ action }: any">
+        <template #create=" { action }: any ">
           <a-popover position="bl">
-            <a-button v-if="action.trigger" :type="action.type || 'primary'" :status="action.status || 'normal'">
+            <a-button v-if=" action.trigger " :type=" action.type || 'primary' " :status=" action.status || 'normal' ">
               <template #icon>
                 <icon-more />
               </template>
             </a-button>
             <template #content>
-              <a-list size="small" :bordered="false" :split="false" hoverable style="user-select: none">
-                <a-list-item v-for="item in triggers" :key="item.label" style="padding: 4px"
-                  @click.stop="onAction({ action: { key: item.key } } as any)">
-                  <a-link style="color: rgb(var(--gray-10))" :hoverable="false">
+              <a-list size="small" :bordered=" false " :split=" false " hoverable style="user-select: none">
+                <a-list-item v-for="         item          in          triggers         " :key=" item.label "
+                  style="padding: 4px" @click.stop=" onAction({ action: { key: item.key } } as any) ">
+                  <a-link style="color: rgb(var(--gray-10))" :hoverable=" false ">
                     <template #icon>
-                      <IconFont :type="item.icon" :size="20" style="vertical-align: middle" />
+                      <IconFont :type=" item.icon " :size=" 20 " style="vertical-align: middle" />
                     </template>
                     {{ $t(item.label) }}
                   </a-link>
@@ -324,53 +333,58 @@ document.title = 'Netdisk 首页';
           </a-popover>
         </template>
 
-        <template #batch-delete="{ action, onAction }: any">
-          <ButtonAction :action="action" :on-action="onAction" icon="icon-shanchu" icon-size="17"
+        <template #batch-delete=" { action, onAction }: any ">
+          <ButtonAction :action=" action " :on-action=" onAction " icon="icon-shanchu" icon-size="17"
             name="list.actions.batch-delete" />
         </template>
 
-        <template #create-share="{ action, onAction }: any">
-          <ButtonAction :action="action" :on-action="onAction" icon="icon-fenxiang2" icon-size="17"
+        <template #create-share=" { action, onAction }: any ">
+          <ButtonAction :action=" action " :on-action=" onAction " icon="icon-fenxiang2" icon-size="17"
             name="list.actions.create-share" />
         </template>
 
-        <template #create-move="{ action, onAction }: any">
-          <ButtonAction :action="action" :on-action="onAction" icon="icon-jiandaojianqie" icon-size="17"
+        <template #create-move=" { action, onAction }: any ">
+          <ButtonAction :action=" action " :on-action=" onAction " icon="icon-jiandaojianqie" icon-size="17"
             name="list.actions.create-move" />
         </template>
-
-        <template #batch-download="{ action, onAction }: any">
-          <ButtonAction :action="action" :on-action="onAction" icon="icon-arrowBottom" icon-size="17"
+        <template #create-copy=" { action, onAction }: any ">
+          <ButtonAction :action=" action " :on-action=" onAction " icon="icon-jiandaojianqie" icon-size="17"
+            name="list.actions.create-copy" />
+        </template>
+        <template #batch-download=" { action, onAction }: any ">
+          <ButtonAction :action=" action " :on-action=" onAction " icon="icon-arrowBottom" icon-size="17"
             name="list.actions.batch-download" />
         </template>
 
-        <template #fileName="{ row, record }">
-          <router-link :to="getNodeLink(record)" class="netdisk-table-tr__name" @click.stop="
+        <template #fileName=" { row, record } ">
+          <router-link :to=" getNodeLink(record) " class="netdisk-table-tr__name" @click.stop="
             record.type === 'file' ? handlePreview(record) : () => { }
           ">
             <IconFont :type="
               record.type === 'folder' ? 'icon-wenjianjia2' : 'icon-file2'
-            " :size="18" style="vertical-align: sub" />
+            " :size=" 18 " style="vertical-align: sub" />
             <span style="margin-left: 6px">{{ row }}</span>
           </router-link>
         </template>
 
         <!-- you can formatSize in formatList -->
-        <template #length="{ row, record }">
-          <span v-if="record.type === 'file'" class="netdisk-table-tr__size">
+        <template #length=" { row, record } ">
+          <span v-if=" record.type === 'file' " class="netdisk-table-tr__size">
             {{ formatSize(row) }}
           </span>
         </template>
       </List>
     </a-space>
-    <a-modal :visible="visible" :ok-loading="loading" :closable="!loading" @ok="handleOperation" @cancel="handleCancel">
+    <a-modal :visible=" visible " :ok-loading=" loading " :closable=" !loading " @ok=" handleOperation "
+      @cancel=" handleCancel ">
       <template #title> 提示 </template>
       <div> 是否确认删除 </div>
     </a-modal>
-    <ShareForm ref="shareRef" @success="onSuccess"></ShareForm>
-    <ModalForm ref="modalRef" @success="onSuccess" />
-    <MoveForm ref="moveRef" :request="moveNodes" @success="onSuccess" />
-    <UploadForm ref="uploadRef" @success="onSuccess" />
+    <ShareForm ref="shareRef" @success=" onSuccess "></ShareForm>
+    <ModalForm ref="modalRef" @success=" onSuccess " />
+    <MoveForm ref="moveRef" :request=" moveNodes " @success=" onSuccess " />
+    <MoveForm ref="copyRef" :request=" copyNodes " @success=" onSuccess " />
+    <UploadForm ref="uploadRef" @success=" onSuccess " />
   </div>
 </template>
 

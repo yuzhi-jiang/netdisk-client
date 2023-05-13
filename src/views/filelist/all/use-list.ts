@@ -87,6 +87,12 @@ export default function useList() {
       bulk: true,
     },
     {
+      key: 'create-copy',
+      icon: IconRotateRight,
+      type: 'text' as const,
+      bulk: true,
+    },
+    {
       key: 'batch-download',
       icon: IconDownload,
       type: 'text' as const,
