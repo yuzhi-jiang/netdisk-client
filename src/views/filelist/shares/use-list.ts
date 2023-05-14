@@ -48,7 +48,7 @@ export default function useList() {
         // yyyy-MM-dd HH:mm:ss
         const currTime = new Date().getTime();
         const expiredTime = new Date(expired).getTime();
-        if (currTime - expiredTime <= 0) return '已过期';
+        if (currTime - expiredTime >= 0) return '已过期';
 
         // 天 时 分
         return getDiffTime(new Date(currTime), new Date(expiredTime));
