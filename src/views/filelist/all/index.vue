@@ -9,6 +9,7 @@ import {
   getFileList,
   getFileDownloadLink,
   moveNodes,
+  copyNodes,
 } from '@/api/filelist';
 import { addNodes } from '@/api/recycle';
 import { useUserStore } from '@/store';
@@ -42,6 +43,7 @@ const listRef = ref<InstanceType<typeof List>>();
 const modalRef = ref<InstanceType<typeof ModalForm>>();
 const shareRef = ref<InstanceType<typeof ShareForm>>();
 const moveRef = ref<InstanceType<typeof MoveForm>>();
+const copyRef = ref<InstanceType<typeof MoveForm>>();
 const uploadRef = ref<InstanceType<typeof UploadForm>>();
 const states = {
   reqParams: {} as ReqParams, // request params
@@ -219,8 +221,14 @@ const onAction = async ({
         moveableFileDiskId: diskId,
       } as any);
       break;
+    case 'create-copy':
+      copyRef.value?.init({
+        diskId,
+        selectedKeys,
+        moveableFileDiskId: diskId,
+      } as any);
+      break;
     case 'batch-download':
-
       selectedKeys?.forEach((fileId) => {
         const record = { diskId: diskId, fileId: fileId }
         handleDownload(record as unknown as NodeRecord)
@@ -339,6 +347,11 @@ document.title = 'Netdisk 首页';
             name="list.actions.create-move" />
         </template>
 
+        <template #create-copy="{ action, onAction }: any">
+          <ButtonAction :action="action" :on-action="onAction" icon="icon-fuzhi2" icon-size="17"
+            name="list.actions.create-copy" />
+        </template>
+
         <template #batch-download="{ action, onAction }: any">
           <ButtonAction :action="action" :on-action="onAction" icon="icon-arrowBottom" icon-size="17"
             name="list.actions.batch-download" />
@@ -370,6 +383,7 @@ document.title = 'Netdisk 首页';
     <ShareForm ref="shareRef" @success="onSuccess"></ShareForm>
     <ModalForm ref="modalRef" @success="onSuccess" />
     <MoveForm ref="moveRef" :request="moveNodes" @success="onSuccess" />
+    <MoveForm ref="copyRef" :request="copyNodes" @success="onSuccess" />
     <UploadForm ref="uploadRef" @success="onSuccess" />
   </div>
 </template>

@@ -5,6 +5,7 @@ import {
   IconShareAlt,
   IconRotateRight,
   IconDownload,
+  IconCopy,
 } from '@arco-design/web-vue/es/icon';
 import type { IColumn } from '@/components/list/types';
 import type { NodeRecord } from '@/api/filelist';
@@ -83,6 +84,12 @@ export default function useList() {
     {
       key: 'create-move',
       icon: IconRotateRight,
+      type: 'text' as const,
+      bulk: true,
+    },
+    {
+      key: 'create-copy',
+      icon: IconCopy,
       type: 'text' as const,
       bulk: true,
     },
