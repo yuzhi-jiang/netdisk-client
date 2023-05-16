@@ -61,7 +61,7 @@ export const paramsAdapter = (
     ...reqQueries,
     ...reqParams,
     ...tableParams,
-    search: search ? `name = ${search}` : search,
+    search,
     parentFileId,
     fileId,
     diskId,
