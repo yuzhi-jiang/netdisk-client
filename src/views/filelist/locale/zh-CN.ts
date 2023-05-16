@@ -32,6 +32,7 @@ export default {
   'list.actions.confirm.batch-recover': '是否确认恢复？',
   'list.actions.confirm.batch-delete': '是否确认删除？',
   'list.actions.confirm.all-clear': '是否确认清空？',
+  'list.toolbar.create-copy': '复制',
 
   // recycle
   ...localeRecycle,
