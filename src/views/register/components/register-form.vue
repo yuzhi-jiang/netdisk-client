@@ -6,8 +6,8 @@
           <a-tooltip content="返回" mini><icon-caret-left /></a-tooltip>
         </template>
       </a-button>
-      注册 Netdisk</div
-    >
+      注册 Netdisk
+    </div>
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
       ref="loginForm"
@@ -35,17 +35,14 @@
       <a-form-item
         field="email"
         :rules="[
-          { required: true, message: '请输入邮箱' },
-          {
-            validator: (v, cb) => {
-              if (isEmail(v)) {
-                cb();
-                return;
-              }
-              cb('请输入正确的邮箱');
-            },
+        { required: true, message: '请输入邮箱' },
+        {
+          validator: (v: string, cb: Callback) => {
+            if (isEmail(v)) cb();
+            else cb('请输入正确的邮箱');
           },
-        ]"
+        },
+      ]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
@@ -72,6 +69,24 @@
           </template>
         </a-input-password>
       </a-form-item>
+
+      <a-form-item
+        field="password"
+        :rules="[{ required: true, message: '请再次输入密码' }, {
+        validator: (v: string, cb: Callback) => {
+          if (v && v === userInfo.password) cb();
+          else cb('请再次输入密码');
+        },
+      }]"
+        :validate-trigger="['change', 'blur']"
+        hide-label
+      >
+        <a-input-password placeholder="请再次输入密码" allow-clear>
+          <template #prefix>
+            <icon-lock />
+          </template>
+        </a-input-password>
+      </a-form-item>
       <a-space :size="16" direction="vertical">
         <a-button type="primary" html-type="submit" long :loading="loading">
           注册
@@ -93,6 +108,7 @@
   import type { LoginData } from '@/api/user';
   import { isEmail } from '@/utils/validate';
   import { redirectLogin } from '@/router/utils';
+  import { Callback } from '@/types/global';
 
   const router = useRouter();
   const { t } = useI18n();

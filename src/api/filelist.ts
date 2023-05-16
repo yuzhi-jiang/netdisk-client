@@ -109,6 +109,11 @@ export function moveNodes(form: IForm) {
   return axios.put('/front/file/move', form);
 }
 
+export function copyNodes(form:IForm) {
+  return axios.put('/front/file/copy', form)
+}
+
+
 export interface IDownFileRecord {
   diskId: string;
   fileId: string;

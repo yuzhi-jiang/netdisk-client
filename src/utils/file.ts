@@ -1,3 +1,6 @@
+import { SHA1, enc  } from 'crypto-js';
+import  WordArray  from 'crypto-js/lib-typedarrays';
+
 export const fileToBase64 = function fileToBase64(file: any): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -51,6 +54,23 @@ const readBlobJson = async (data: Blob) => {
     reader.readAsText(data);
   });
 };
+export const getFileHash = (file: any): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      const buffer = new Uint8Array(reader.result as ArrayBuffer);
+      const wordArray = WordArray.create(buffer as any);
+      const sha1 = SHA1(wordArray);
+      const hex = sha1.toString(enc.Hex);
+    
+      resolve(hex);
+    };
+    reader.onerror = (error: any) => {
+      reject(error);
+    };
+    reader.readAsArrayBuffer(file);
+  });
+};
 
 export const saveFile = async (
   res: any
@@ -98,4 +118,12 @@ export function dataURLtoFile(dataurl: string, filename: string) {
   return new File([u8arr], filename, {
     type: arr[0].split(';')[0],
   });
+}
+export function formatBytes(bytes:number, decimals?:number) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const dm = decimals? + 1 : 3;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
