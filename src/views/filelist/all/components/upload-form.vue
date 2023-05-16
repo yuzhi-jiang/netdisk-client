@@ -72,11 +72,11 @@ const createWithFolders1 = async (params: FileParams, option: RequestOption) => 
   const { data } = await createWithFolders(defFromdata);
 
   if (data.rapidUpload === true) {
-    setInterval(() => onProgress(50), 500)
-    setInterval(() => onProgress(100), 1000)
+    setTimeout(() => onProgress(50), 500)
+    setTimeout(() => onProgress(100), 1000)
 
 
-    setInterval(() => {
+    setTimeout(() => {
       successUpload(onSuccess)
       emits('success');
       setVisible(false);
@@ -107,13 +107,13 @@ const uploadPart1 = async (defUploadPart: uploadPartParams, option: RequestOptio
       onError("上传失败")
     }
   }).catch((error) => {
-      if (axios.isCancel(error)) {
-        console.log('File upload canceled:', error.message);
-      } else {
-        console.error('File upload failed:', error);
-      }
-      return
-    });
+    if (axios.isCancel(error)) {
+      console.log('File upload canceled:', error.message);
+    } else {
+      console.error('File upload failed:', error);
+    }
+    return
+  });
 }
 const complete1 = async (fileId: string, uploadId: string, diskId: string, option: RequestOption) => {
   const { onProgress, onError, onSuccess, fileItem, name } = option;
@@ -153,7 +153,7 @@ const main = async (option: RequestOption) => {
  */
   const hash = await getFileHash(fileItem.file);
   console.log(hash);
-  
+
   defFromdata.hash = hash;
   console.log(defFromdata)
   defFromdata.fileName = fileItem.name as string;
