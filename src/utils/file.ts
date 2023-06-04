@@ -1,5 +1,5 @@
-import { SHA1, enc  } from 'crypto-js';
-import  WordArray  from 'crypto-js/lib-typedarrays';
+import { SHA1, SHA256, enc } from 'crypto-js';
+import WordArray from 'crypto-js/lib-typedarrays';
 
 export const fileToBase64 = function fileToBase64(file: any): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -54,7 +54,12 @@ const readBlobJson = async (data: Blob) => {
     reader.readAsText(data);
   });
 };
+
 export const getFileHash = (file: any): Promise<string> => {
+  return calculateFileHash(file);
+}
+
+const getFileSha1 = (file: any): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = async (ev) => {
@@ -62,7 +67,7 @@ export const getFileHash = (file: any): Promise<string> => {
       const wordArray = WordArray.create(buffer as any);
       const sha1 = SHA1(wordArray);
       const hex = sha1.toString(enc.Hex);
-    
+
       resolve(hex);
     };
     reader.onerror = (error: any) => {
@@ -71,6 +76,29 @@ export const getFileHash = (file: any): Promise<string> => {
     reader.readAsArrayBuffer(file);
   });
 };
+async function calculateFileHash(file: File): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const buffer = event.target!.result as ArrayBuffer;
+      crypto.subtle.digest('SHA-256', buffer)
+        .then((hashBuffer) => {
+          const hashArray = Array.from(new Uint8Array(hashBuffer));
+          const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+          resolve(hashHex);
+        })
+        .catch(reject);
+    };
+
+    reader.onerror = (e) => {
+      console.log(e)
+      reject(new Error('Failed to read file'));
+    };
+
+    reader.readAsArrayBuffer(file);
+  });
+}
 
 export const saveFile = async (
   res: any
@@ -119,10 +147,10 @@ export function dataURLtoFile(dataurl: string, filename: string) {
     type: arr[0].split(';')[0],
   });
 }
-export function formatBytes(bytes:number, decimals?:number) {
+export function formatBytes(bytes: number, decimals?: number) {
   if (bytes === 0) return '0 Bytes';
   const k = 1024;
-  const dm = decimals? + 1 : 3;
+  const dm = decimals ? + 1 : 3;
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
