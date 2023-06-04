@@ -76,7 +76,7 @@ const getFileSha1 = (file: any): Promise<string> => {
     reader.readAsArrayBuffer(file);
   });
 };
-async function calculateFileHash(file: File): Promise<string> {
+const calculateFileHash = (file: File): Promise<string> => {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
 
