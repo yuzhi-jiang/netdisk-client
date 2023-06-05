@@ -77,25 +77,19 @@ const getFileSha1 = (file: any): Promise<string> => {
   });
 };
 const calculateFileHash = (file: File): Promise<string> => {
-  return new Promise<string>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
+    reader.onload = async (ev) => {
+      const buffer = new Uint8Array(reader.result as ArrayBuffer);
+      const wordArray = WordArray.create(buffer as any);
+      const sha256 = SHA256(wordArray);
+      const hex = sha256.toString(enc.Hex);
 
-    reader.onload = (event) => {
-      const buffer = event.target!.result as ArrayBuffer;
-      crypto.subtle.digest('SHA-256', buffer)
-        .then((hashBuffer) => {
-          const hashArray = Array.from(new Uint8Array(hashBuffer));
-          const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-          resolve(hashHex);
-        })
-        .catch(reject);
+      resolve(hex);
     };
-
-    reader.onerror = (e) => {
-      console.log(e)
-      reject(new Error('Failed to read file'));
+    reader.onerror = (error: any) => {
+      reject(error);
     };
-
     reader.readAsArrayBuffer(file);
   });
 }
