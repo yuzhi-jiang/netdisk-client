@@ -98,11 +98,8 @@
 
     // window.open('https://docs.google.com/viewer?url=http://arm.todayto.com:8888/file/get/id?fileId=a3445ffb01a046fd8295c49a5332813a')
     console.log(previewUrlConfig.value.url);
-    if (extension == 'docx') {
-      window.open(googlepreviewUrl);
-    } else {
-      previewUrlConfig.value.visible = true;
-    }
+    previewUrlConfig.value.visible = true;
+   
   };
   const hidePreview = async () => {
     previewUrlConfig.value.url = '';
