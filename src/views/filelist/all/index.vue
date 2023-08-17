@@ -83,7 +83,7 @@
 
     // https://docs.google.com/viewer?url=http://arm.todayto.com:8888/file/get/id?fileId=94058be9b5ea4d978791b37a791bb971
     const baseUrl = 'http://175.178.167.193:8012/onlinePreview?url=';
-    const hostUrl = 'http://arm.todayto.com:8888/file/get/id?fileId='; // baseUrl+previewUrl
+    const hostUrl = 'http://line.yefeng.love:9527/file/get/id?fileId='; // baseUrl+previewUrl
     let googlepreviewUrl = 'https://docs.google.com/viewer?url=';
     const fullUrl = `${hostUrl}${data.fileId}&fullfilename=${data.fileName}`;
     const extension = data.fileName.split('.').pop();
@@ -149,7 +149,7 @@
 
     // https://docs.google.com/viewer?url=http://arm.todayto.com:8888/file/get/id?fileId=94058be9b5ea4d978791b37a791bb971
     const baseUrl = 'http://175.178.167.193:8012/onlinePreview?url=';
-    const hostUrl = 'http://arm.todayto.com:8888/file/get/id?fileId='; // baseUrl+previewUrl
+    const hostUrl = 'http://line.yefeng.love:9527/file/get/id?fileId='; // baseUrl+previewUrl
 
     const fullUrl = `${hostUrl}${data.fileId}&fullfilename=${data.fileName}`;
     // const fileUrl: string = URL.createObjectURL(blob);

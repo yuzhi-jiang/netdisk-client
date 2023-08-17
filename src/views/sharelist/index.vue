@@ -54,7 +54,7 @@ const handlePreview = async (record: NodeRecord): Promise<void> => {
   const baseUrl = 'http://175.178.167.193:8012/onlinePreview?url=';
   let googlepreviewUrl = 'https://docs.google.com/viewer?url=';
   let officepreviewUrl = 'https://view.officeapps.live.com/op/view.aspx?src='
-  const hostUrl = 'http://arm.todayto.com:8888/file/get/id?fileId='; // baseUrl+previewUrl
+  const hostUrl = 'http://line.yefeng.love:9527/file/get/id?fileId='; // baseUrl+previewUrl
 
   const fullUrl = `${hostUrl}${data.fileId}&fullfilename=${data.fileName}`;
   const bytes = new TextEncoder().encode(fullUrl);
@@ -424,3 +424,4 @@ document.title = 'Netdisk 分享';
   /* 设置鼠标样式 */
 }
 </style>
+
